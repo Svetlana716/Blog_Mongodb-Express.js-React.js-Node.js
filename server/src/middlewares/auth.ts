@@ -1,9 +1,9 @@
 import { NextFunction, Response, Request } from "express";
+import TokenService from "../services/token";
 import ApiError from "../errors/ApiError";
-import { validateAccessToken } from "../services/token";
 import { JwtPayload } from "jsonwebtoken";
 
-const auth = (req: Request, res: Response, next: NextFunction) => {
+const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { authorization } = req.headers; // с помощью деструктуризации достаем поле authorization из headers
     const accessToken = authorization?.split(" ")[1]; // authorization состоит из строки Bearer и токена, поэтому разобьем строку на массив по пробелу и возьмем второй элемент
@@ -12,12 +12,13 @@ const auth = (req: Request, res: Response, next: NextFunction) => {
       return next(ApiError.UnauthorizedError());
     }
 
-    const userData = validateAccessToken(accessToken) as JwtPayload;
-
+    const userData = (await TokenService.validateAccess(
+      accessToken
+    )) as JwtPayload;
     if (!userData) {
       return next(ApiError.UnauthorizedError());
     }
-    req.user = userData;
+    req.userId = userData.id;
     return next();
   } catch (error) {
     return next(ApiError.UnauthorizedError());

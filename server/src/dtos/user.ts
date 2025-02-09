@@ -1,6 +1,7 @@
+// для того чтобы на клиент отдавать только необходимые поля (без пароля)
 class UserDto {
-  email;
   id;
+  email;
 
   constructor(model: any) {
     this.id = model._id;

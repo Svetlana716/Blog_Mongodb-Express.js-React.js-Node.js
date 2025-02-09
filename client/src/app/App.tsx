@@ -7,8 +7,19 @@ import AddPostPage from "../pages/AddPostPage";
 import RegisterPage from "../pages/RegisterPage";
 import LoginPage from "../pages/LoginPage";
 import EditPostPage from "../pages/EditPostPage";
+import { useEffect } from "react";
+import { useAppDispatch } from "../store/hooks";
+import { fetchCheckAuth } from "../store/auth/actions";
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(fetchCheckAuth());
+    }
+  }, [dispatch]);
+
   return (
     <Layout>
       <Routes>

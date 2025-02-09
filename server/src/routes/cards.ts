@@ -6,7 +6,7 @@ import {
   deleteCardById,
   likeCard,
   dislikeCard,
-} from "../controllers/cards";
+} from "../controllers/posts";
 
 const cardsRouter = Router();
 

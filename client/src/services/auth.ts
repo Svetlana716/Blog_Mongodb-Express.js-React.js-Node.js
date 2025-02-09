@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
 import api from "../utils/api";
-import { IAuthResponse, ICredentials } from "../models/auth";
+import { IAuthResponse, ICredentials, IRegistration } from "../models/auth";
 
 export const registrationUser = async (
-  credentials: ICredentials
+  credentials: IRegistration
 ): Promise<AxiosResponse<IAuthResponse>> => {
   return await api.post<IAuthResponse>("/register", credentials);
 };

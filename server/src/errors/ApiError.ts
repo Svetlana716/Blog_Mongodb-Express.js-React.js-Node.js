@@ -21,6 +21,14 @@ class ApiError extends Error {
   static BadRequest(message: string, errors: ValidationError[] = []) {
     return new ApiError(constants.HTTP_STATUS_BAD_REQUEST, message, errors);
   }
+
+  static ForbiddenError() {
+    return new ApiError(constants.HTTP_STATUS_FORBIDDEN, "Доступ запрещён");
+  }
+
+  static NotFoundError(message: string) {
+    return new ApiError(constants.HTTP_STATUS_NOT_FOUND, message);
+  }
 }
 
 export default ApiError;

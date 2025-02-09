@@ -24,8 +24,10 @@ api.interceptors.response.use(
     ) {
       originalReq._isRetry = true;
       try {
-        const response = await api.get<IAuthResponse>("/refresh");
-        localStorage.setItem("token", response.data.accessToken);
+        const { data } = await axios.get<IAuthResponse>(`${URL}/refresh`, {
+          withCredentials: true,
+        });
+        localStorage.setItem("token", data.accessToken);
         return api.request(originalReq);
       } catch (error) {
         console.log(error);

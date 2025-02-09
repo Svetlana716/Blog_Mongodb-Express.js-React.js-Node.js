@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "../../models/user";
+import { fetchGetAllUsers } from "./acrions";
 
 interface UserState {
   users: IUser[];
@@ -14,8 +15,28 @@ const initialState: UserState = {
 };
 
 const userSlice = createSlice({
-  name: "auth",
+  name: "user",
   initialState,
   reducers: {},
-  extraReducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchGetAllUsers.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGetAllUsers.fulfilled, (state, { payload }) => {
+        state.users = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchGetAllUsers.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      });
+  },
 });
+
+export const usersReducer = userSlice.reducer;

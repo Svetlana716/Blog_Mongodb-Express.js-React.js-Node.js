@@ -1,27 +1,28 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { loginUser, logoutUser, registrationUser } from "../../services/auth";
-import { IAuthError, IAuthResponse, ICredentials } from "../../models/auth";
-import { AxiosError } from "axios";
+import { IAuthResponse, ICredentials, IRegistration } from "../../models/auth";
+import axios, { AxiosError } from "axios";
+import { URL } from "../../utils/constants";
+import { IResponseError } from "../../utils/types";
 
 export const fetchRegistrationUser = createAsyncThunk<
   IAuthResponse,
-  ICredentials,
+  IRegistration,
   {
-    rejectValue: IAuthError;
+    rejectValue: IResponseError;
   }
 >(
   "user/registration",
-  async (credentials: ICredentials, { rejectWithValue }) => {
+  async (credentials: IRegistration, { rejectWithValue }) => {
     try {
       const res = await registrationUser(credentials);
       localStorage.setItem("token", res.data.accessToken);
       return res.data;
     } catch (err) {
-      const error = err as AxiosError<IAuthError>; // cast the error for access
+      const error = err as AxiosError<IResponseError>;
       if (!error.response) {
         throw err;
       }
-      // We got validation errors, let's return those so we can reference in our component and set form errors
       return rejectWithValue(error.response.data);
     }
   }
@@ -31,7 +32,7 @@ export const fetchLoginUser = createAsyncThunk<
   IAuthResponse,
   ICredentials,
   {
-    rejectValue: IAuthError;
+    rejectValue: IResponseError;
   }
 >("user/login", async (credentials: ICredentials, { rejectWithValue }) => {
   try {
@@ -39,23 +40,51 @@ export const fetchLoginUser = createAsyncThunk<
     localStorage.setItem("token", data.accessToken);
     return data;
   } catch (err) {
-    const error = err as AxiosError<IAuthError>; // cast the error for access
+    const error = err as AxiosError<IResponseError>;
     if (!error.response) {
       throw err;
     }
-    // We got validation errors, let's return those so we can reference in our component and set form errors
     return rejectWithValue(error.response.data);
   }
 });
 
-export const fetchLogoutUser = createAsyncThunk(
-  "user/logout",
-  async (_, thunkAPI) => {
-    try {
-      localStorage.removeItem("token");
-      return await logoutUser();
-    } catch (error) {
-      thunkAPI.rejectWithValue(`Ошибка ${error}`);
-    }
+export const fetchLogoutUser = createAsyncThunk<
+  unknown,
+  undefined,
+  {
+    rejectValue: IResponseError;
   }
-);
+>("user/logout", async (_, { rejectWithValue }) => {
+  try {
+    localStorage.removeItem("token");
+    return await logoutUser();
+  } catch (err) {
+    const error = err as AxiosError<IResponseError>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const fetchCheckAuth = createAsyncThunk<
+  IAuthResponse,
+  undefined,
+  {
+    rejectValue: IResponseError;
+  }
+>("user/refresh", async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.get<IAuthResponse>(`${URL}/refresh`, {
+      withCredentials: true,
+    });
+    localStorage.setItem("token", data.accessToken);
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<IResponseError>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});

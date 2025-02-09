@@ -6,12 +6,11 @@ export interface IAuthResponse {
   user: IUser;
 }
 
-export interface IAuthError {
-  message: string;
-  errors: string[];
-}
-
 export interface ICredentials {
   email: string;
   password: string;
+}
+
+export interface IRegistration extends ICredentials {
+  name: string;
 }

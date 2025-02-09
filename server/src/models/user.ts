@@ -1,6 +1,6 @@
-import { Schema, model, Model, Document } from "mongoose";
+import { Schema, model } from "mongoose";
 import validator from "validator";
-import { IUser } from "../types/user";
+import { IUser } from "../types/IUser";
 
 const userSchema = new Schema<IUser>(
   {
@@ -18,17 +18,24 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 8,
     },
-    /*     name: {
+    name: {
       type: String,
-      required: false,
-      default: "Жак-Ив Кусто",
+      required: true,
+      default: "",
       minlength: 2,
       maxlength: 30,
     },
-    about: {
+    posts: [
+      {
+        required: false,
+        type: Schema.Types.ObjectId,
+        ref: "posts",
+      },
+    ],
+    /* about: {
       type: String,
       required: false,
-      default: "Исследователь",
+      default: "",
       minlength: 2,
       maxlength: 200,
     },
@@ -39,16 +46,9 @@ const userSchema = new Schema<IUser>(
         validator: (v: string) => validator.isURL(v),
         message: "Введен не валидный URL",
       },
-      default:
-        "https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png",
+      default: "",
     },
-
-    posts: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Posts",
-      },
-    ], */
+     */
   },
   {
     versionKey: false,
@@ -57,6 +57,7 @@ const userSchema = new Schema<IUser>(
 );
 
 export default model<IUser>("user", userSchema);
+
 /* interface UserModel extends Model<IUser> {
   findUserByCredentials: (
     email: string,
