@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import TokenService from "../services/token";
 import ApiError from "../errors/ApiError";
-import { JwtPayload } from "jsonwebtoken";
+import { JwtPayload, UserJwtPayload } from "jsonwebtoken";
 
 const auth = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -14,7 +14,8 @@ const auth = async (req: Request, res: Response, next: NextFunction) => {
 
     const userData = (await TokenService.validateAccess(
       accessToken
-    )) as JwtPayload;
+    )) as UserJwtPayload;
+
     if (!userData) {
       return next(ApiError.UnauthorizedError());
     }

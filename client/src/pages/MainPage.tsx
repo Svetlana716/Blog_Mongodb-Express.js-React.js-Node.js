@@ -14,6 +14,10 @@ const MainPage = () => {
     dispatch(fetchGetPosts());
   }, [dispatch]);
 
+  if (posts.length === 0) {
+    return <p className="text-xl text-center text-white py-10">Нет постов</p>;
+  }
+
   return (
     <div className="max-w-[900px] mx-auto py-10">
       <div className="flex justify-between gap-8">
@@ -23,7 +27,7 @@ const MainPage = () => {
           ))}
         </div>
         <div className="basis-1/5">
-          <div className="text-xs uppercase text-white">Популярное:</div>
+          <h2 className="text-xs uppercase text-white">Популярное:</h2>
 
           {popularPosts?.map((post) => (
             <SideBar key={post._id} post={post} />

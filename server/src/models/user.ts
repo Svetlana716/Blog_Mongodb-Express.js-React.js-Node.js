@@ -29,7 +29,7 @@ const userSchema = new Schema<IUser>(
       {
         required: false,
         type: Schema.Types.ObjectId,
-        ref: "posts",
+        ref: "post",
       },
     ],
     /* about: {

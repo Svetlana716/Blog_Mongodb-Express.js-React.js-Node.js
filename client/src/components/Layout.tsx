@@ -6,7 +6,7 @@ export interface ILayoutProps {
 }
 const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-10">
       <Navbar />
       {children}
     </div>

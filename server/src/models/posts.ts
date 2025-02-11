@@ -28,11 +28,13 @@ const postSchema = new Schema<IPost>(
       type: Number,
       default: 0,
     },
-
-    /* comments: {
-      type: Schema.Types.ObjectId,
-      ref: "comment",
-    }, */
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "comment",
+        default: 0,
+      },
+    ],
   },
   {
     versionKey: false,

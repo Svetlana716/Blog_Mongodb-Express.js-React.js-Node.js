@@ -8,5 +8,5 @@ export interface IPost {
   author: IUser;
   picture?: Express.Multer.File;
   views: number;
-  //comments?: IComment;
+  comments?: IComment[];
 }

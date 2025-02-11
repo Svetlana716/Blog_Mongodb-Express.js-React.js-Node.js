@@ -1,32 +1,3 @@
-import { Router } from "express";
-import { Joi, celebrate } from "celebrate";
-import {
-  getCards,
-  createCard,
-  deleteCardById,
-  likeCard,
-  dislikeCard,
-} from "../controllers/posts";
-
-const cardsRouter = Router();
-
-// возвращает все карточки
-cardsRouter.get("/", getCards);
-
-// создаёт карточку
-cardsRouter.post(
-  "/",
-  celebrate({
-    body: Joi.object()
-      .keys({
-        name: Joi.string().required().min(2).max(30),
-        link: Joi.string().required(),
-      })
-      .unknown(true),
-  }),
-  createCard
-);
-
 // удаляет карточку по идентификатору
 cardsRouter.delete(
   "/:cardId",

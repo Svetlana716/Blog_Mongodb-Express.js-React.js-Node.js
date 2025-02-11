@@ -1,6 +1,6 @@
-//import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
+import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
 import { Link } from "react-router";
-import FormatDate from "../utils/formatDate";
+import FormatDate from "../utils/FormatDate";
 import { IPost } from "../models/post";
 import { FC } from "react";
 import { staticFilesURL } from "../utils/constants";
@@ -10,8 +10,12 @@ interface Props {
 }
 
 const PostItem: FC<Props> = ({ post }) => {
+  if (!post) {
+    return <p className="text-xl text-center text-white py-10">Нет постa</p>;
+  }
+
   return (
-    <Link to={`/${post._id}`}>
+    <Link to={`/posts/${post._id}`}>
       <div className="flex flex-col basis-1/4 flex-grow">
         <div
           className={post.picture ? "flex rouded-sm h-80" : "flex rounded-sm"}
@@ -35,14 +39,14 @@ const PostItem: FC<Props> = ({ post }) => {
           {post.text}
         </p>
 
-        {/* <div className="flex gap-3 items-center mt-2">
+        <div className="flex gap-3 items-center mt-2">
           <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
-            <AiFillEye /> <span>{post}</span>
+            <AiFillEye /> <span>{post.views}</span>
           </button>
           <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
             <AiOutlineMessage /> <span>{post.comments?.length || 0} </span>
           </button>
-        </div> */}
+        </div>
       </div>
     </Link>
   );

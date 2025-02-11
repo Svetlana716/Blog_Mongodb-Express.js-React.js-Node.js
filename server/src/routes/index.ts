@@ -7,7 +7,7 @@ import { upload } from "../services/file";
 
 const router = Router({ mergeParams: true });
 
-//users
+//auth
 router.post(
   "/register",
   body("email").isEmail(),
@@ -22,14 +22,20 @@ router.post(
 );
 router.post("/logout", UserController.logout);
 router.get("/refresh", UserController.refresh);
+
+//users
 router.get("/users", auth, UserController.getAll);
 
 //posts
 router.post("/posts", auth, upload.single("picture"), PostController.create); // в upload.single("название поля формы")
 router.get("/posts", auth, PostController.getAll);
+router.get("/posts/my", auth, PostController.getMy);
+router.put("/posts/:id", auth, upload.single("picture"), PostController.update);
 router.get("/posts/:id", auth, PostController.getOne);
-router.put("/posts", auth, PostController.update);
 router.delete("/posts/:id", auth, PostController.delete);
+
+//comments
+//router.post("/comments/:id", auth, CommentController.create);
 
 export default router;
 

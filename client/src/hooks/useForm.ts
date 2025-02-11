@@ -10,13 +10,17 @@ export function useForm<T>(inputValues: InputType) {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    e.preventDefault();
     const { name, value } = e.target;
     if (e.target instanceof HTMLInputElement && e.target.files) {
-      console.log(e.target.files[0]);
       setValues({ ...values, [name]: e.target.files[0] });
     } else {
       setValues({ ...values, [name]: value });
     }
   };
-  return { values, handleChange };
+
+  const reset = () => {
+    setValues(inputValues as T);
+  };
+  return { values, handleChange, reset };
 }

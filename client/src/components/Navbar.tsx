@@ -2,11 +2,13 @@ import { Link, NavLink, useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchLogoutUser } from "../store/auth/actions";
+import { CgLaptop } from "react-icons/cg";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const { isAuth } = useAppSelector(getAuthInfoPath);
   const navigate = useNavigate();
+  const { isAuth } = useAppSelector(getAuthInfoPath);
+
   const activeStyles = {
     color: "white",
   };
@@ -18,9 +20,9 @@ const Navbar = () => {
 
   return (
     <div className="flex py-4 justify-between items-center">
-      <span className="flex justify-center items-center w-6 h-5 bg-gray-600 text-xs text-white rounded-xs">
-        E
-      </span>
+      <Link to={"/"}>
+        <CgLaptop color="white" size={50} />
+      </Link>
       {isAuth && (
         <ul className="flex gap-8">
           <li>
@@ -34,7 +36,7 @@ const Navbar = () => {
           </li>
           <li>
             <NavLink
-              to="/posts"
+              to="/myPosts"
               className="text-xs text-gray-400 hover:text-white"
               style={({ isActive }) => (isActive ? activeStyles : undefined)}
             >

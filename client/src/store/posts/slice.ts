@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IPost } from "../../models/post";
-import { fetchCreatePost, fetchGetPosts } from "./actions";
+import {
+  fetchCreatePost,
+  fetchDeletePost,
+  fetchEditPost,
+  fetchGetMyPosts,
+  fetchGetPostById,
+  fetchGetPosts,
+} from "./actions";
 
 interface PostState {
   posts: IPost[];
   popularPosts: IPost[];
+  myPosts: IPost[];
+  currentPost: IPost | null;
   isLoading: boolean;
   error: string | null | undefined;
 }
@@ -12,6 +21,8 @@ interface PostState {
 const initialState: PostState = {
   posts: [],
   popularPosts: [],
+  myPosts: [],
+  currentPost: null,
   isLoading: false,
   error: null,
 };
@@ -61,6 +72,77 @@ const postsSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchGetPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchGetMyPosts.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGetMyPosts.fulfilled, (state, { payload }) => {
+        state.myPosts = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchGetMyPosts.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchGetPostById.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchGetPostById.fulfilled, (state, { payload }) => {
+        state.currentPost = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchGetPostById.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchEditPost.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchEditPost.fulfilled, (state, { payload }) => {
+        const index = state.myPosts.findIndex(
+          (post) => post._id === payload._id
+        );
+        state.myPosts[index] = payload;
+        state.isLoading = false;
+      })
+      .addCase(fetchEditPost.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchDeletePost.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchDeletePost.fulfilled, (state, { payload }) => {
+        state.myPosts = state.posts.filter((post) => post._id !== payload);
+        state.isLoading = false;
+      })
+      .addCase(fetchDeletePost.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
           state.error = action.payload.message;

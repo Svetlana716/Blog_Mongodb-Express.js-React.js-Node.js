@@ -1,9 +1,11 @@
 export interface IPost {
+  _id: string;
   title: string;
   text: string;
-  picture: string;
   author: string;
-  _id: string;
+  picture?: string;
+  views: number;
+  comments?: [];
   createdAt: string;
   updatedAt: string;
 }

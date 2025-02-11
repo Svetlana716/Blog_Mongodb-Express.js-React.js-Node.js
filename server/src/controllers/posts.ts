@@ -8,7 +8,7 @@ class PostController {
     const { body, userId, file } = req;
     try {
       const post = await PostService.create(body, userId, file);
-      return res.status(constants.HTTP_STATUS_CREATED).send({ data: post });
+      return res.status(constants.HTTP_STATUS_CREATED).send(post);
     } catch (error) {
       next(error);
     }
@@ -30,9 +30,20 @@ class PostController {
         next(ApiError.BadRequest("id не передан"));
       }
       const post = await PostService.getOne(id);
-      return res.status(constants.HTTP_STATUS_OK).send({
-        data: post,
-      });
+      return res.status(constants.HTTP_STATUS_OK).send(post);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getMy(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req;
+      if (!userId) {
+        next(ApiError.UnauthorizedError());
+      }
+      const post = await PostService.getMy(userId);
+      return res.status(constants.HTTP_STATUS_OK).send(post);
     } catch (error) {
       next(error);
     }
@@ -40,14 +51,10 @@ class PostController {
 
   async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const { post } = req.body;
-      if (!post.id) {
-        next(ApiError.BadRequest("id не передан"));
-      }
-      const updatedPost = await PostService.update(post);
-      return res.status(constants.HTTP_STATUS_OK).send({
-        data: updatedPost,
-      });
+      const { body, userId, file } = req;
+      const { id } = req.params;
+      const updatedPost = await PostService.update(id, userId, body, file);
+      return res.status(constants.HTTP_STATUS_OK).send(updatedPost);
     } catch (error) {
       next(error);
     }
@@ -55,19 +62,10 @@ class PostController {
 
   async delete(req: Request, res: Response, next: NextFunction) {
     try {
+      const { userId } = req;
       const { id } = req.params;
-      if (!id) {
-        next(ApiError.BadRequest("id не передан"));
-      }
-      const post = await PostService.getOne(id);
-
-      /* if (post.author.id !== id) {
-        next(ApiError.ForbiddenError());
-      } */
-      post.deleteOne();
-      return res.status(constants.HTTP_STATUS_OK).send({
-        data: post,
-      });
+      await PostService.delete(id, userId);
+      return res.status(constants.HTTP_STATUS_OK).send("success");
     } catch (error) {
       next(error);
     }

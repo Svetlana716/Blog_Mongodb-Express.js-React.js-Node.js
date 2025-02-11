@@ -1,22 +1,14 @@
-import { useNavigate } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchCreatePost } from "../store/posts/actions";
 import { getPostInfoPath } from "../store/posts/selectors";
-
-interface IInput {
-  text: string;
-  title: string;
-  picture: File | string;
-}
+import { IPostFormInput } from "../utils/types";
 
 const AddPostPage = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
   const { isLoading, error } = useAppSelector(getPostInfoPath);
 
-  const { values, handleChange } = useForm<IInput>({
+  const { values, handleChange, reset } = useForm<IPostFormInput>({
     title: "",
     text: "",
     picture: "",
@@ -27,18 +19,22 @@ const AddPostPage = () => {
   const handleCreatePost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("title", title);
-    data.append("text", text);
-    data.append("picture", picture);
+
+    // Добавляем все значения из values в FormData
+    Object.entries(values).forEach(([key, value]) => {
+      if (value) {
+        // Только если значение существует
+        data.append(key, value);
+      }
+    });
     dispatch(fetchCreatePost(data));
-    navigate("/");
+    if (!error && !isLoading) {
+      reset();
+    }
   };
+
   return (
-    <form
-      className="w-1/2 mx-auto py-10"
-      encType="multipart/form-data"
-      onSubmit={handleCreatePost}
-    >
+    <form className="w-1/2 mx-auto py-10" onSubmit={handleCreatePost}>
       <label
         className="text-gray-300 py-2 bg-gray-600 text-xs mt-2 flex items-center justify-center border-5 border-dotted cursor-pointer h-10"
         htmlFor="picture"
@@ -91,6 +87,7 @@ const AddPostPage = () => {
         </button>
         <button
           type="reset"
+          onClick={reset}
           className="flex justify-center items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4"
         >
           Reset
