@@ -69,7 +69,7 @@ const authSlice = createSlice({
       })
       .addCase(fetchLogoutUser.fulfilled, (state) => {
         state.user = null;
-        state.isAuth = true;
+        state.isAuth = false;
         state.isLoading = false;
       })
       .addCase(fetchLogoutUser.rejected, (state, action) => {

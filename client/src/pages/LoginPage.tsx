@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { FC } from "react";
 import { useForm } from "../hooks/useForm";
@@ -12,7 +12,6 @@ interface IInput {
 
 const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const { isLoading, error } = useAppSelector(getAuthInfoPath);
 
@@ -26,9 +25,6 @@ const LoginPage: FC = () => {
   const handleLoginUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(fetchLoginUser({ email, password }));
-    if (!error && !isLoading) {
-      navigate("/");
-    }
   };
   return (
     <form onSubmit={handleLoginUser} className="w-1/4 h-60 mx-auto mt-40">
@@ -67,7 +63,7 @@ const LoginPage: FC = () => {
           Войти
         </button>
         <Link
-          to="/user/signup"
+          to="/register"
           className="flex justify-center items-center text-xs text-white"
         >
           Нет аккаунта?

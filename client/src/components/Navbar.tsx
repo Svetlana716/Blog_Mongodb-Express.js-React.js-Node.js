@@ -1,4 +1,4 @@
-import { Link, NavLink, useNavigate } from "react-router";
+import { Link, NavLink } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchLogoutUser } from "../store/auth/actions";
@@ -6,7 +6,6 @@ import { CgLaptop } from "react-icons/cg";
 
 const Navbar = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { isAuth } = useAppSelector(getAuthInfoPath);
 
   const activeStyles = {
@@ -15,7 +14,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(fetchLogoutUser());
-    navigate("user/signin");
   };
 
   return (
@@ -58,7 +56,7 @@ const Navbar = () => {
         {isAuth ? (
           <button onClick={handleLogout}>Выйти</button>
         ) : (
-          <Link to="user/signin">Войти</Link>
+          <Link to="/login">Войти</Link>
         )}
       </div>
     </div>

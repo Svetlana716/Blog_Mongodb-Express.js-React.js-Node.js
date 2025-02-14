@@ -114,7 +114,7 @@ export const fetchDeletePost = createAsyncThunk<
   }
 >("posts/delete", async (id, { rejectWithValue }) => {
   try {
-    return await deleteMyPost(id);
+    await deleteMyPost(id);
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
     if (!error.response) {

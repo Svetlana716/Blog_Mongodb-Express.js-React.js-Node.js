@@ -44,7 +44,7 @@ class PostService {
     const user = await UserModel.findById(id);
     if (user && user.posts) {
       return await Promise.all(
-        user!.posts.map((post) => {
+        user!.posts.reverse().map((post) => {
           return PostModel.findById(post._id);
         })
       );

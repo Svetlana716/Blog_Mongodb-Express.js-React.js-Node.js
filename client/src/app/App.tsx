@@ -10,6 +10,7 @@ import EditPostPage from "../pages/EditPostPage";
 import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { fetchCheckAuth } from "../store/auth/actions";
+import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute1";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -23,13 +24,30 @@ function App() {
   return (
     <Layout>
       <Routes>
+        <Route
+          path="register"
+          element={<OnlyUnAuth component={<RegisterPage />} />}
+        />
+        <Route
+          path="login"
+          element={<OnlyUnAuth component={<LoginPage />} />}
+        />
         <Route path="/" element={<MainPage />} />
-        <Route path="myPosts" element={<MyPostsPage />} />
         <Route path="posts/:id" element={<PostPage />} />
-        <Route path="posts/:id/edit" element={<EditPostPage />} />
-        <Route path="posts/new" element={<AddPostPage />} />
-        <Route path="user/signup" element={<RegisterPage />} />
-        <Route path="user/signin" element={<LoginPage />} />
+
+        <Route
+          path="myPosts"
+          element={<OnlyAuth component={<MyPostsPage />} />}
+        />
+        <Route
+          path="posts/:id/edit"
+          element={<OnlyAuth component={<EditPostPage />} />}
+        />
+        <Route
+          path="posts/new"
+          element={<OnlyAuth component={<AddPostPage />} />}
+        />
+        {/* <Route path="*" element={<NotFoundPage />} /> */}
       </Routes>
     </Layout>
   );

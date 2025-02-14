@@ -29,15 +29,15 @@ router.get("/users", auth, UserController.getAll);
 
 //posts
 router.post("/posts", auth, upload.single("picture"), PostController.create); // в upload.single("название поля формы")
-router.get("/posts", auth, PostController.getAll);
+router.get("/posts", PostController.getAll);
 router.get("/posts/my", auth, PostController.getMy);
 router.put("/posts/:id", auth, upload.single("picture"), PostController.update);
-router.get("/posts/:id", auth, PostController.getOne);
+router.get("/posts/:id", PostController.getOne);
 router.delete("/posts/:id", auth, PostController.delete);
 
 //comments
 router.post("/comments/:id", auth, CommentController.create);
-router.get("/comments/:id", auth, CommentController.getAll);
+router.get("/comments/:id", CommentController.getAll);
 
 export default router;
 
