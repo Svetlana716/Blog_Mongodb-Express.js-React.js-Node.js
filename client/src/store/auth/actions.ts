@@ -49,7 +49,7 @@ export const fetchLoginUser = createAsyncThunk<
 });
 
 export const fetchLogoutUser = createAsyncThunk<
-  unknown,
+  void,
   undefined,
   {
     rejectValue: IResponseError;
@@ -57,7 +57,7 @@ export const fetchLogoutUser = createAsyncThunk<
 >("user/logout", async (_, { rejectWithValue }) => {
   try {
     localStorage.removeItem("token");
-    return await logoutUser();
+    await logoutUser();
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
     if (!error.response) {

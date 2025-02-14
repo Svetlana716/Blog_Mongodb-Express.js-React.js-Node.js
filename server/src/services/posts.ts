@@ -1,8 +1,7 @@
-import PostModel from "../models/posts";
+import PostModel from "../models/post";
 import UserModel from "../models/user";
 import ApiError from "../errors/ApiError";
 import { IPost } from "types/IPost";
-import { JwtPayload } from "jsonwebtoken";
 
 class PostService {
   async create(

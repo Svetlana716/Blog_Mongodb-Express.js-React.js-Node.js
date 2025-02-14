@@ -12,6 +12,7 @@ import { fetchDeletePost, fetchGetPostById } from "../store/posts/actions";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { getPostInfoPath } from "../store/posts/selectors";
 import { useEffect } from "react";
+import Comments from "../components/CommentForm";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -115,28 +116,7 @@ const PostPage = () => {
               )}
             </div>
           </div>
-          {/* <div className="w-1/3 p-8 bg-gray-700 flex flex-col gap-2 rounded-sm">
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-                placeholder="Comment"
-                className="text-black w-full rounded-sm bg-gray-400 border p-2 text-xs outline-none placeholder:text-gray-700"
-              />
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4"
-              >
-                Отправить
-              </button>
-            </form>
-
-            {comments?.map((cmt) => (
-              <CommentItem key={cmt._id} cmt={cmt} />
-            ))}
-          </div> */}
+          <Comments id={post._id} />
         </div>
       )}
     </>

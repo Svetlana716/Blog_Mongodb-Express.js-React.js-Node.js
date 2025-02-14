@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IUser } from "../../models/user";
 import { IResponseError } from "../../utils/types";
-import { getUsers } from "../../services/user";
+import { getUsers } from "../../services/users";
 import { AxiosError } from "axios";
 
 export const fetchGetAllUsers = createAsyncThunk<

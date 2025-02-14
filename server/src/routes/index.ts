@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import auth from "../middlewares/auth";
 import PostController from "../controllers/posts";
 import UserController from "../controllers/users";
+import CommentController from "../controllers/comment";
 import { upload } from "../services/file";
 
 const router = Router({ mergeParams: true });
@@ -35,7 +36,8 @@ router.get("/posts/:id", auth, PostController.getOne);
 router.delete("/posts/:id", auth, PostController.delete);
 
 //comments
-//router.post("/comments/:id", auth, CommentController.create);
+router.post("/comments/:id", auth, CommentController.create);
+router.get("/comments/:id", auth, CommentController.getAll);
 
 export default router;
 

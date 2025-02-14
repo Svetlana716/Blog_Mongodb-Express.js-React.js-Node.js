@@ -8,7 +8,7 @@ import {
   getAllPosts,
   getMyPosts,
   getPostById,
-} from "../../services/post";
+} from "../../services/posts";
 import { AxiosError } from "axios";
 
 export const fetchCreatePost = createAsyncThunk<

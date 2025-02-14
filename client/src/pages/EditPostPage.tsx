@@ -62,7 +62,7 @@ const EditPostPage = () => {
         <input
           id="picture"
           type="file"
-          name={"picture"}
+          name="picture"
           onChange={handleChange}
         />
       </label>
@@ -79,8 +79,8 @@ const EditPostPage = () => {
         Post title:
         <input
           id="title"
-          type="title"
-          name={"title"}
+          type="text"
+          name="title"
           value={title}
           onChange={handleChange}
           placeholder="title"

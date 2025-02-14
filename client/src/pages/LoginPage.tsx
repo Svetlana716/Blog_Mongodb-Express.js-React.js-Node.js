@@ -26,7 +26,9 @@ const LoginPage: FC = () => {
   const handleLoginUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(fetchLoginUser({ email, password }));
-    navigate("/");
+    if (!error && !isLoading) {
+      navigate("/");
+    }
   };
   return (
     <form onSubmit={handleLoginUser} className="w-1/4 h-60 mx-auto mt-40">

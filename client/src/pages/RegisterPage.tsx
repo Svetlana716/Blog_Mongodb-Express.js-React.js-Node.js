@@ -26,7 +26,9 @@ const RegisterPage = () => {
   const handleRegisterUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(fetchRegistrationUser({ name, email, password }));
-    navigate("/");
+    if (!error && !isLoading) {
+      navigate("/");
+    }
   };
   return (
     <form onSubmit={handleRegisterUser} className="w-1/4 h-60 mx-auto mt-40">

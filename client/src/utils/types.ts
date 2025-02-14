@@ -8,3 +8,7 @@ export interface IPostFormInput {
   title: string;
   picture: File | string;
 }
+
+export interface ICommentFormInput {
+  text: string;
+}
