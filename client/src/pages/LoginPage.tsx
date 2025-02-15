@@ -27,7 +27,10 @@ const LoginPage: FC = () => {
     dispatch(fetchLoginUser({ email, password }));
   };
   return (
-    <form onSubmit={handleLoginUser} className="w-1/4 h-60 mx-auto mt-40">
+    <form
+      onSubmit={handleLoginUser}
+      className="w-3/4 sm:w-2/3 lg:w-1/3 h-60 mx-auto mt-40"
+    >
       <h1 className="text-lg text-white text-center">Авторизация</h1>
       <label className="text-xs text-gray-400" htmlFor="">
         email:

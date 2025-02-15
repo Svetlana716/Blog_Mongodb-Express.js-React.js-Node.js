@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { SCREEN_DESKTOP, SCREEN_MOBILE } from "../utils/constants";
+import { SCREEN_LG, SCREEN_SM } from "../utils/constants";
 
 const useResize = () => {
   const [width, setWidth] = useState(window.innerWidth);
@@ -17,9 +17,9 @@ const useResize = () => {
   }, []);
 
   return {
-    isMobile: width <= SCREEN_MOBILE,
-    isTablet: width >= SCREEN_MOBILE && width <= SCREEN_DESKTOP,
-    isDesktop: width >= SCREEN_DESKTOP,
+    isMobile: width <= SCREEN_SM,
+    isTablet: width >= SCREEN_SM && width <= SCREEN_LG,
+    isDesktop: width >= SCREEN_LG,
   };
 };
 

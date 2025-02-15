@@ -4,9 +4,10 @@ import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchLogoutUser } from "../store/auth/actions";
 import { CgLaptop } from "react-icons/cg";
 import useResize from "../hooks/useResize";
+import { useState } from "react";
 
 const Header = () => {
-  //const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
   const dispatch = useAppDispatch();
   const { isAuth } = useAppSelector(getAuthInfoPath);
 
@@ -21,62 +22,13 @@ const Header = () => {
   const { isMobile } = useResize();
 
   return (
-    <header className="flex py-4 justify-between items-center">
+    <div className="flex py-4 justify-between items-center">
       <Link to={"/"}>
-        <CgLaptop color="white" size={!isMobile ? 50 : 30} />
+        <CgLaptop color="white" size={!isMobile ? 50 : 40} />
       </Link>
       {isAuth && (
         <nav>
-          <ul className="flex gap-8">
-            <li>
-              <NavLink
-                to="/"
-                className="sm:text-lg text-xs  font-semibold  text-gray-400 hover:text-white"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Главная
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/myPosts"
-                className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Мои посты
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/posts/new"
-                className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Добавить пост
-              </NavLink>
-            </li>
-          </ul>
-        </nav>
-      )}
-      <div className="flex justify-center items-center bg-gray-600 text-xs text-white font-semibold rounded-sm px-4 py-2">
-        {isAuth ? (
-          <button onClick={handleLogout}>Выйти</button>
-        ) : (
-          <Link to="/login">Войти</Link>
-        )}
-      </div>
-    </header>
-  );
-};
-export default Header;
-/* return (
-    <div className="flex items-center justify-between border-b border-gray-400 py-8">
-      <Link to={"/"}>
-        <CgLaptop color="white" size={!isMobile ? 50 : 30} />
-      </Link>
-      {isAuth && (
-        <nav>
-          <section className="MOBILE-MENU flex lg:hidden">
+          <section className="MOBILE-MENU flex sm:hidden">
             <div
               className="HAMBURGER-ICON space-y-2"
               onClick={() => setIsNavOpen((prev: boolean) => !prev)} // toggle isNavOpen state on click
@@ -86,9 +38,7 @@ export default Header;
               <span className="block h-0.5 w-8 animate-pulse bg-gray-600"></span>
             </div>
 
-            <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
-              {" "}
-              // toggle class based on isNavOpen state
+            <div className={isNavOpen ? "showMenuNav" : "hidden"}>
               <div
                 className="CROSS-ICON absolute top-0 right-0 px-8 py-8"
                 onClick={() => setIsNavOpen(false)} // change isNavOpen state to false to close the menu
@@ -106,82 +56,60 @@ export default Header;
                   <line x1="6" y1="6" x2="18" y2="18" />
                 </svg>
               </div>
-              <ul className="MENU-LINK-MOBILE-OPEN flex flex-col items-center justify-between min-h-[250px]">
-                <li className="border-b border-gray-400 my-8 uppercase">
-                  <NavLink
+              <ul className="MENU-LINK-MOBILE-OPEN flex flex-col items-center justify-between min-h-full py-50">
+                <li>
+                  <Link
                     to="/"
-                    className="sm:text-lg text-xs  font-semibold  text-gray-400 hover:text-white"
-                    style={({ isActive }) =>
-                      isActive ? activeStyles : undefined
-                    }
+                    onClick={() => setIsNavOpen(false)}
+                    className="text-lg  font-semibold  text-gray-400 hover:text-white"
                   >
                     Главная
-                  </NavLink>
+                  </Link>
                 </li>
-                <li className="border-b border-gray-400 my-8 uppercase"></li>
                 <li>
-                  <NavLink
+                  <Link
                     to="/myPosts"
-                    className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                    style={({ isActive }) =>
-                      isActive ? activeStyles : undefined
-                    }
+                    onClick={() => setIsNavOpen(false)}
+                    className="text-lg font-semibold  text-gray-400 hover:text-white"
                   >
                     Мои посты
-                  </NavLink>
-                </li>
-                <li className="border-b border-gray-400 my-8 uppercase"></li>
-                <li>
-                  <NavLink
-                    to="/myPosts"
-                    className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                    style={({ isActive }) =>
-                      isActive ? activeStyles : undefined
-                    }
-                  >
-                    Мои посты
-                  </NavLink>
+                  </Link>
                 </li>
                 <li>
-                  <NavLink
+                  <Link
                     to="/posts/new"
-                    className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                    style={({ isActive }) =>
-                      isActive ? activeStyles : undefined
-                    }
+                    onClick={() => setIsNavOpen(false)}
+                    className="text-lg font-semibold  text-gray-400 hover:text-white"
                   >
                     Добавить пост
-                  </NavLink>
+                  </Link>
+                </li>
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="flex justify-center items-center bg-gray-600 text-xs text-white font-semibold rounded-sm px-4 py-2"
+                  >
+                    Выйти
+                  </button>
                 </li>
               </ul>
             </div>
           </section>
 
-          <ul className="DESKTOP-MENU hidden space-x-8 lg:flex">
-            <li className="border-b border-gray-400 my-8 uppercase">
+          <ul className="DESKTOP-MENU hidden space-x-8 sm:flex">
+            <li>
               <NavLink
                 to="/"
-                className="sm:text-lg text-xs  font-semibold  text-gray-400 hover:text-white"
+                className="text-lg font-semibold  text-gray-400 hover:text-white"
                 style={({ isActive }) => (isActive ? activeStyles : undefined)}
               >
                 Главная
               </NavLink>
             </li>
-            <li className="border-b border-gray-400 my-8 uppercase"></li>
             <li>
               <NavLink
                 to="/myPosts"
-                className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Мои посты
-              </NavLink>
-            </li>
-            <li className="border-b border-gray-400 my-8 uppercase"></li>
-            <li>
-              <NavLink
-                to="/myPosts"
-                className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
+                className="text-lg font-semibold  text-gray-400 hover:text-white"
                 style={({ isActive }) => (isActive ? activeStyles : undefined)}
               >
                 Мои посты
@@ -190,7 +118,7 @@ export default Header;
             <li>
               <NavLink
                 to="/posts/new"
-                className="sm:text-lg text-xs font-semibold  text-gray-400 hover:text-white"
+                className="text-lg font-semibold  text-gray-400 hover:text-white"
                 style={({ isActive }) => (isActive ? activeStyles : undefined)}
               >
                 Добавить пост
@@ -199,31 +127,23 @@ export default Header;
           </ul>
         </nav>
       )}
-      <div className="flex justify-center items-center bg-gray-600 text-xs text-white font-semibold rounded-sm px-4 py-2">
-        {isAuth ? (
-          <button onClick={handleLogout}>Выйти</button>
-        ) : (
-          <Link to="/login">Войти</Link>
-        )}
-      </div>
-      <style>{`
-      .hideMenuNav {
-        display: none;
-      }
-      .showMenuNav {
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 100vh;
-        top: 0;
-        left: 0;
-        background: white;
-        z-index: 10;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        align-items: center;
-      }
-    `}</style>
+      {isAuth && !isMobile && (
+        <button
+          onClick={handleLogout}
+          className="flex justify-center items-center bg-gray-600 text-xs text-white font-semibold rounded-sm px-4 py-2"
+        >
+          Выйти
+        </button>
+      )}
+      {!isAuth && (
+        <Link
+          to="/login"
+          className="flex justify-center items-center bg-gray-600 text-xs text-white font-semibold rounded-sm px-4 py-2"
+        >
+          Войти
+        </Link>
+      )}
     </div>
-  ); */
+  );
+};
+export default Header;
