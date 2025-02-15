@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { fetchCheckAuth } from "../store/auth/actions";
 import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute1";
+import NotFoundPage from "../pages/NotFoundPage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -47,7 +48,7 @@ function App() {
           path="posts/new"
           element={<OnlyAuth component={<AddPostPage />} />}
         />
-        {/* <Route path="*" element={<NotFoundPage />} /> */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Layout>
   );

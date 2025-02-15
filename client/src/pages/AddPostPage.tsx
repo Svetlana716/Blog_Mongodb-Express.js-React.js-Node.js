@@ -34,7 +34,10 @@ const AddPostPage = () => {
   };
 
   return (
-    <form className="w-1/2 mx-auto py-10" onSubmit={handleCreatePost}>
+    <form
+      className="md:w-3/4 lg:w-3/5 mx-auto py-10"
+      onSubmit={handleCreatePost}
+    >
       <label
         className="text-gray-300 py-2 bg-gray-600 text-xs mt-2 flex items-center justify-center border-5 border-dotted cursor-pointer h-10"
         htmlFor="picture"

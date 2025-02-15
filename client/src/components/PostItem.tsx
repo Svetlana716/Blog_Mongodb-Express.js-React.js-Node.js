@@ -40,12 +40,12 @@ const PostItem: FC<Props> = ({ post }) => {
         </p>
 
         <div className="flex gap-3 items-center mt-2">
-          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+          <div className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
             <AiFillEye /> <span>{post.views}</span>
-          </button>
-          <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+          </div>
+          <div className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
             <AiOutlineMessage /> <span>{post.comments?.length || 0} </span>
-          </button>
+          </div>
         </div>
       </div>
     </Link>

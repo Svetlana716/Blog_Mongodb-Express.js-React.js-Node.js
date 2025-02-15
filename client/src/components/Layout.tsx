@@ -1,14 +1,14 @@
 import { FC, ReactNode } from "react";
-import Navbar from "./Navbar";
+import Header from "./Header";
 
 export interface ILayoutProps {
   children: ReactNode;
 }
 const Layout: FC<ILayoutProps> = ({ children }) => {
   return (
-    <div className="container mx-auto px-10">
-      <Navbar />
-      {children}
+    <div className="container mx-auto px-5">
+      <Header />
+      <main className="max-w-[1200px] mx-auto">{children}</main>
     </div>
   );
 };

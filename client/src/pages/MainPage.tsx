@@ -4,11 +4,14 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchGetPosts } from "../store/posts/actions";
 import { getPostInfoPath } from "../store/posts/selectors";
 import PostItem from "../components/PostItem";
+import useResize from "../hooks/useResize";
 
 const MainPage = () => {
   const dispatch = useAppDispatch();
 
   const { posts, popularPosts } = useAppSelector(getPostInfoPath);
+
+  const { isDesktop } = useResize();
 
   useEffect(() => {
     dispatch(fetchGetPosts());
@@ -19,21 +22,13 @@ const MainPage = () => {
   }
 
   return (
-    <div className="max-w-[900px] mx-auto py-10">
-      <div className="flex justify-between gap-8">
-        <div className="flex flex-col gap-10 basis-4/5">
-          {posts?.map((post) => (
-            <PostItem key={post._id} post={post} />
-          ))}
-        </div>
-        <div className="basis-1/5">
-          <h2 className="text-xs uppercase text-white">Популярное:</h2>
-
-          {popularPosts?.map((post) => (
-            <SideBar key={post._id} post={post} />
-          ))}
-        </div>
+    <div className="flex justify-between gap-8">
+      <div className="flex flex-col gap-10 md:basis-1/1 pt-10">
+        {posts?.map((post) => (
+          <PostItem key={post._id} post={post} />
+        ))}
       </div>
+      {isDesktop && <SideBar posts={popularPosts} />}
     </div>
   );
 };

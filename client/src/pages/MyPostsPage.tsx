@@ -24,7 +24,7 @@ const MyPostsPage = () => {
       ) : error ? (
         <p>{error}</p>
       ) : (
-        <div className="w-1/2 mx-auto py-10 flex flex-col gap-10">
+        <div className="w-full lg:w-9/10 mx-auto py-10 flex flex-col gap-10">
           {myPosts.map((post) => (
             <PostItem post={post} key={post._id} />
           ))}

@@ -13,6 +13,7 @@ import { getAuthInfoPath } from "../store/auth/selectors";
 import { getPostInfoPath } from "../store/posts/selectors";
 import { useEffect } from "react";
 import Comments from "../components/CommentForm";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -49,20 +50,14 @@ const PostPage = () => {
 
   return (
     <>
-      <button
-        onClick={handleBackClick}
-        className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4"
-      >
-        Назад
-      </button>
-
+      <IoArrowBackOutline color="white" size={25} onClick={handleBackClick} />
       {isLoading ? (
         <p>"loading"</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
-        <div className="flex gap-10 py-8">
-          <div className="w-2/3">
+        <div className="flex max-lg:flex-col gap-10 py-8">
+          <div className="w-full">
             <div className="flex flex-col basis-1/4 flex-grow">
               <div
                 className={

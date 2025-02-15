@@ -35,7 +35,7 @@ const Comments: FC<Props> = ({ id }) => {
   };
 
   return (
-    <div className="w-1/3 p-8 bg-gray-700 flex flex-col gap-2 rounded-sm">
+    <div className=" p-8 bg-gray-700 flex flex-col gap-2 rounded-sm">
       <form className="flex gap-2" onSubmit={handleSubmit}>
         <input
           type="text"
