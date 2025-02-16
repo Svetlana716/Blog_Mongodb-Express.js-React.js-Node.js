@@ -20,7 +20,6 @@ class PostService {
     await UserModel.findByIdAndUpdate(userId, {
       $push: { posts: newPost },
     });
-
     return newPost;
   }
 

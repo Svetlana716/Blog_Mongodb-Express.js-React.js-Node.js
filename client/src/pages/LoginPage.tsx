@@ -12,7 +12,6 @@ interface IInput {
 
 const LoginPage: FC = () => {
   const dispatch = useAppDispatch();
-
   const { isLoading, error } = useAppSelector(getAuthInfoPath);
 
   const { values, handleChange } = useForm<IInput>({
@@ -29,7 +28,7 @@ const LoginPage: FC = () => {
   return (
     <form
       onSubmit={handleLoginUser}
-      className="w-3/4 sm:w-2/3 lg:w-7/10 h-60 mx-auto mt-40"
+      className="w-9/10 sm:w-2/3 lg:w-1/3 h-60 mx-auto mt-40"
     >
       <h1 className="text-lg text-primary font-semibold text-center">
         Авторизация

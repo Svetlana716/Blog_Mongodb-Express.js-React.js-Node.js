@@ -32,7 +32,6 @@ const AddPostPage = () => {
       reset();
     }
   };
-
   return (
     <form
       className="md:w-3/4 lg:w-3/5 mx-auto py-10"
@@ -49,7 +48,11 @@ const AddPostPage = () => {
       </label>
       <div className="flex object-cover py-2">
         {picture && (
-          <img src={URL.createObjectURL(picture as File)} alt="image" />
+          <img
+            className="m-auto"
+            src={URL.createObjectURL(picture as File)}
+            alt="image"
+          />
         )}
       </div>
       <label className="text-md text-primary" htmlFor="title">

@@ -66,7 +66,11 @@ const EditPostPage = () => {
       </label>
       <div className="flex object-cover py-2">
         {post && !picture && (
-          <img src={`${staticFilesURL}/${post.picture}`} alt="image" />
+          <img
+            className="m-auto"
+            src={`${staticFilesURL}/${post.picture}`}
+            alt="image"
+          />
         )}
 
         {picture && (

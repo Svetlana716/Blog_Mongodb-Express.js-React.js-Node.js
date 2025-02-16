@@ -29,7 +29,7 @@ const RegisterPage = () => {
   return (
     <form
       onSubmit={handleRegisterUser}
-      className="w-3/4 sm:w-2/3 lg:w-7/10 h-60 mx-auto mt-40"
+      className="w-9/10 sm:w-2/3 lg:w-1/3 h-60 mx-auto mt-40"
     >
       <h1 className="text-lg text-primary font-semibold text-center">
         Регистрация
@@ -43,7 +43,7 @@ const RegisterPage = () => {
           value={name}
           name={"name"}
           onChange={handleChange}
-          className="mt-1 mb-5 text-black w-full rounded-lg bg-gray-400 border p-2  text-md outline-none placeholder:text-gray-50"
+          className="input mb-5"
         />
       </label>
       <label className="text-md text-primary" htmlFor="email">
@@ -55,7 +55,7 @@ const RegisterPage = () => {
           value={email}
           name={"email"}
           onChange={handleChange}
-          className="mt-1 mb-5 text-black w-full rounded-lg bg-gray-400 border p-2  text-md outline-none placeholder:text-gray-50"
+          className="input mb-5"
         />
       </label>
       <label className="text-md text-primary" htmlFor="password">
@@ -67,7 +67,7 @@ const RegisterPage = () => {
           value={password}
           name={"password"}
           onChange={handleChange}
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border p-2 text-md outline-none placeholder:text-gray-50"
+          className="input mb-5"
         />
       </label>
 

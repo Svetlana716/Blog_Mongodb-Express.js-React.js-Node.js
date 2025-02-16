@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchLogoutUser } from "../store/auth/actions";
@@ -11,13 +11,14 @@ import { useTheme } from "../hooks/useTheme";
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const dispatch = useAppDispatch();
+  const location = useLocation();
   const { isAuth } = useAppSelector(getAuthInfoPath);
   const { isMobile } = useResize();
 
   const { darkTheme, setDarkTheme } = useTheme();
 
   const activeStyles = {
-    color: darkTheme ? "" : "##335B03",
+    color: darkTheme ? "#d6e736" : "#FAFAFA",
   };
 
   const handleLogout = () => {
@@ -25,7 +26,7 @@ const Header = () => {
   };
 
   return (
-    <div className="flex py-4 justify-between items-center">
+    <header className="flex py-4 justify-between items-center">
       <Link to={"/"}>
         <CgLaptop
           className="text-primary text-hover"
@@ -142,32 +143,34 @@ const Header = () => {
           </ul>
         </nav>
       )}
-      {!isMobile && (
-        <button onClick={setDarkTheme}>
-          {darkTheme ? (
-            <IoSunny className="text-primary text-hover" size={40} />
-          ) : (
-            <IoMoon className="text-primary text-hover" size={40} />
-          )}
-        </button>
-      )}
-      {isAuth && !isMobile && (
-        <button
-          onClick={handleLogout}
-          className="button bg-secondary text-md text-primary block-hover"
-        >
-          Выйти
-        </button>
-      )}
-      {!isAuth && (
-        <Link
-          to="/login"
-          className="button bg-secondary text-md text-primary block-hover"
-        >
-          Войти
-        </Link>
-      )}
-    </div>
+      <div className="flex gap-10">
+        {!isMobile && (
+          <button onClick={setDarkTheme}>
+            {darkTheme ? (
+              <IoSunny className="text-primary text-hover" size={40} />
+            ) : (
+              <IoMoon className="text-primary text-hover" size={40} />
+            )}
+          </button>
+        )}
+        {isAuth && !isMobile && (
+          <button
+            onClick={handleLogout}
+            className="button bg-secondary text-md text-primary block-hover"
+          >
+            Выйти
+          </button>
+        )}
+        {!isAuth && !(location.pathname === "/login") && (
+          <Link
+            to="/login"
+            className="button bg-secondary text-md text-primary block-hover"
+          >
+            Войти
+          </Link>
+        )}
+      </div>
+    </header>
   );
 };
 export default Header;
