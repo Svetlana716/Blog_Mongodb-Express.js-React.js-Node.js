@@ -15,8 +15,11 @@ const PostItem: FC<Props> = ({ post }) => {
   }
 
   return (
-    <Link to={`/posts/${post._id}`}>
-      <div className="flex flex-col basis-1/4 flex-grow">
+    <article className="block-hover">
+      <Link
+        to={`/posts/${post._id}`}
+        className="flex flex-col basis-1/4 flex-grow bg-secondary rounded-sm p-5 text-primary text-md"
+      >
         <div
           className={post.picture ? "flex rouded-sm h-80" : "flex rounded-sm"}
         >
@@ -29,26 +32,24 @@ const PostItem: FC<Props> = ({ post }) => {
           )}
         </div>
         <div className="flex justify-between items-center pt-2">
-          <div className="text-xs text-white opacity-50">{post.title}</div>
-          <div className="text-xs text-white opacity-50">
+          <p className="opacity-50">{post.title}</p>
+          <p className=" opacity-50">
             {FormatDate.dayMonthYear(post.createdAt)}
-          </div>
+          </p>
         </div>
-        <div className="text-white text-xl">{post.title}</div>
-        <p className="text-white opacity-60 text-xs pt-4 line-clamp-4">
-          {post.text}
-        </p>
+        <p className=" text-xl">{post.title}</p>
+        <p className="opacity-60 text-xs pt-4 line-clamp-4">{post.text}</p>
 
         <div className="flex gap-3 items-center mt-2">
-          <div className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+          <div className="flex items-center justify-center gap-2  opacity-50">
             <AiFillEye /> <span>{post.views}</span>
           </div>
-          <div className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+          <div className="flex items-center justify-center gap-2  opacity-50">
             <AiOutlineMessage /> <span>{post.comments?.length || 0} </span>
           </div>
         </div>
-      </div>
-    </Link>
+      </Link>
+    </article>
   );
 };
 export default PostItem;

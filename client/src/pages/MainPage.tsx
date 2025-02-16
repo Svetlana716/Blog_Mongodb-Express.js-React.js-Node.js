@@ -23,11 +23,13 @@ const MainPage = () => {
 
   return (
     <div className="flex justify-between gap-8">
-      <div className="flex flex-col gap-10 md:basis-1/1 pt-10">
+      <ul className="flex flex-col gap-10 md:basis-1/1 pt-10 list-none m-0">
         {posts?.map((post) => (
-          <PostItem key={post._id} post={post} />
+          <li key={post._id}>
+            <PostItem post={post} />
+          </li>
         ))}
-      </div>
+      </ul>
       {isDesktop && <SideBar posts={popularPosts} />}
     </div>
   );

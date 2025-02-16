@@ -50,15 +50,19 @@ const PostPage = () => {
 
   return (
     <>
-      <IoArrowBackOutline color="white" size={25} onClick={handleBackClick} />
+      <IoArrowBackOutline
+        className="text-primary text-hover"
+        size={25}
+        onClick={handleBackClick}
+      />
       {isLoading ? (
         <p>"loading"</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <div className="flex max-lg:flex-col gap-10 py-8">
-          <div className="w-full">
-            <div className="flex flex-col basis-1/4 flex-grow">
+          <div className="w-full text-primary text-md">
+            <div className="flex flex-col flex-grow">
               <div
                 className={
                   post?.picture ? "flex rouded-sm h-80" : "flex rounded-sm"
@@ -75,37 +79,38 @@ const PostPage = () => {
             </div>
 
             <div className="flex justify-between items-center pt-2">
-              <div className="text-xs text-white opacity-50">{post.author}</div>
-              <div className="text-xs text-white opacity-50">
+              <p className="opacity-50">{post.title}</p>
+              <p className=" opacity-50">
                 {FormatDate.dayMonthYear(post.createdAt)}
-              </div>
+              </p>
             </div>
-            <div className="text-white text-xl">{post.title}</div>
-            <p className="text-white opacity-60 text-xs pt-4">{post.text}</p>
+            <p className=" text-xl">{post.title}</p>
+            <p className="opacity-60 text-xs pt-4 line-clamp-4">{post.text}</p>
 
             <div className="flex gap-3 items-center mt-2 justify-between">
-              <div className="flex gap-3 mt-4">
-                <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+              <div className="flex gap-3 items-center mt-2">
+                <div className="flex items-center justify-center gap-2  opacity-50">
                   <AiFillEye /> <span>{post.views}</span>
-                </button>
-                <button className="flex items-center justify-center gap-2 text-xs text-white opacity-50">
+                </div>
+                <div className="flex items-center justify-center gap-2  opacity-50">
                   <AiOutlineMessage />{" "}
                   <span>{post.comments?.length || 0} </span>
-                </button>
+                </div>
               </div>
 
               {user?.id === post.author && (
                 <div className="flex gap-3 mt-4">
-                  <button className="flex items-center justify-center gap-2 text-white opacity-50">
-                    <Link to={`/posts/${id}/edit`}>
-                      <AiTwotoneEdit />
-                    </Link>
-                  </button>
-                  <button
-                    onClick={() => handleDeletePost(id)}
-                    className="flex items-center justify-center gap-2  text-white opacity-50"
-                  >
-                    <AiFillDelete />
+                  <Link to={`/posts/${id}/edit`}>
+                    <AiTwotoneEdit
+                      size={30}
+                      className="text-primary text-hover"
+                    />
+                  </Link>
+                  <button onClick={() => handleDeletePost(id)}>
+                    <AiFillDelete
+                      size={30}
+                      className="text-primary text-hover"
+                    />
                   </button>
                 </div>
               )}

@@ -29,56 +29,61 @@ const RegisterPage = () => {
   return (
     <form
       onSubmit={handleRegisterUser}
-      className="w-3/4 sm:w-2/3 lg:w-1/3 h-60 mx-auto mt-40"
+      className="w-3/4 sm:w-2/3 lg:w-7/10 h-60 mx-auto mt-40"
     >
-      <h1 className="text-lg text-white text-center">Регистрация</h1>
-      <label className="text-xs text-gray-400" htmlFor="">
-        name:
+      <h1 className="text-lg text-primary font-semibold text-center">
+        Регистрация
+      </h1>
+      <label className="text-md text-primary" htmlFor="name">
+        имя:
         <input
+          id="name"
           type="text"
-          placeholder="name"
+          placeholder="имя"
           value={name}
           name={"name"}
           onChange={handleChange}
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-50"
+          className="mt-1 mb-5 text-black w-full rounded-lg bg-gray-400 border p-2  text-md outline-none placeholder:text-gray-50"
         />
       </label>
-      <label className="text-xs text-gray-400" htmlFor="">
+      <label className="text-md text-primary" htmlFor="email">
         email:
         <input
-          type="email"
+          id="email"
+          type="text"
           placeholder="email"
           value={email}
           name={"email"}
           onChange={handleChange}
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-50"
+          className="mt-1 mb-5 text-black w-full rounded-lg bg-gray-400 border p-2  text-md outline-none placeholder:text-gray-50"
         />
       </label>
-      <label className="text-xs text-gray-400" htmlFor="">
-        password:
+      <label className="text-md text-primary" htmlFor="password">
+        пароль:
         <input
+          id="password"
           type="password"
           placeholder="password"
           value={password}
           name={"password"}
           onChange={handleChange}
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-50"
+          className="mt-1 text-black w-full rounded-lg bg-gray-400 border p-2 text-md outline-none placeholder:text-gray-50"
         />
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p>{error}</p>}
+      {error && <p className="text-md text-red">{error}</p>}
 
       <div className="flex gap-8 justify-center mt-4">
         <button
           type="submit"
-          className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4"
+          className="flex justify-center items-center bg-secondary text-md text-primary font-semibold rounded-sm px-4 py-2"
         >
           Подтвердить
         </button>
         <Link
           to="/login"
-          className="flex justify-center items-center text-xs text-white"
+          className="flex justify-center items-center text-lg text-primary font-semibold"
         >
           Уже зарегистрированы?
         </Link>

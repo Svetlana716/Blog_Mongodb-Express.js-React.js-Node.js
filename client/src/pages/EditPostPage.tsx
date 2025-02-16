@@ -55,14 +55,12 @@ const EditPostPage = () => {
 
   return (
     <form className="w-1/2 mx-auto py-10" onSubmit={handleEditPost}>
-      <label
-        className="text-gray-300 py-2 bg-gray-600 text-xs mt-2 flex items-center justify-center border-5 border-dotted cursor-pointer h-10"
-        htmlFor="picture"
-      >
+      <label htmlFor="picture">
         <input
           id="picture"
           type="file"
           name="picture"
+          className="mt-2 border-5 border-dotted border-text-hover-dark dark:border-bg-primary-dark  text-text-primary-dark dark:text-text-primary w-full rounded-sm bg-stone-800 dark:bg-amber-200  p-4 text-md outline-none placeholder:text-gray-700 cursor-pointer h-15"
           onChange={handleChange}
         />
       </label>
@@ -75,7 +73,7 @@ const EditPostPage = () => {
           <img src={URL.createObjectURL(picture as File)} alt="image" />
         )}
       </div>
-      <label className="text-xs text-white opacity-70" htmlFor="title">
+      <label htmlFor="title">
         Post title:
         <input
           id="title"
@@ -84,7 +82,7 @@ const EditPostPage = () => {
           value={title}
           onChange={handleChange}
           placeholder="title"
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border py-1 px-2 text-xs outline-none placeholder:text-gray-600"
+          className="input"
         />
       </label>
       <label className="text-xs text-white opacity-70" htmlFor="text">
@@ -95,7 +93,7 @@ const EditPostPage = () => {
           value={text}
           onChange={handleChange}
           placeholder="post text"
-          className="mt-1 text-black w-full rounded-lg bg-gray-400 border resize-none h-40 py-1 px-2 text-xs outline-none placeholder:text-gray-600"
+          className="input h-50"
         />
       </label>
 
@@ -105,16 +103,16 @@ const EditPostPage = () => {
       <div className="flex gap-8 items-center justify-center mt-4">
         <button
           type="submit"
-          className="flex justify-center items-center bg-gray-600 text-xs text-white rounded-sm py-2 px-4"
+          className="button text-md text-primary bg-secondary block-hover"
         >
-          Add
+          Подтвердить
         </button>
         <button
           type="reset"
           onClick={reset}
-          className="flex justify-center items-center bg-red-500 text-xs text-white rounded-sm py-2 px-4"
+          className="button text-md text-primary block-hover outline-2"
         >
-          Reset
+          Сбросить
         </button>
       </div>
     </form>

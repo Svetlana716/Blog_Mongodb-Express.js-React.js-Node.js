@@ -10,7 +10,7 @@ import EditPostPage from "../pages/EditPostPage";
 import { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { fetchCheckAuth } from "../store/auth/actions";
-import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute1";
+import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute";
 import NotFoundPage from "../pages/NotFoundPage";
 
 function App() {
