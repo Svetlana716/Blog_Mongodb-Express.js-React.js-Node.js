@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchEditPost, fetchGetPostById } from "../store/posts/actions";
@@ -6,10 +6,10 @@ import { getPostInfoPath } from "../store/posts/selectors";
 import { IPostFormInput } from "../utils/types";
 import { useEffect } from "react";
 import { staticFilesURL } from "../utils/constants";
+import ErrorMessage from "../components/ErrorMessage";
 
 const EditPostPage = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { id } = useParams();
   const { posts, currentPost, isLoading, error } =
     useAppSelector(getPostInfoPath);
@@ -48,9 +48,6 @@ const EditPostPage = () => {
       }
     });
     dispatch(fetchEditPost({ id, formData }));
-    if (!error && !isLoading) {
-      navigate("/myPosts");
-    }
   };
 
   return (
@@ -102,7 +99,7 @@ const EditPostPage = () => {
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex gap-8 items-center justify-center mt-4">
         <button

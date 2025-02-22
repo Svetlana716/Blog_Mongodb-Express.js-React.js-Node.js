@@ -1,6 +1,14 @@
 export interface IResponseError {
+  error: string;
   message: string;
-  errors: string[];
+  statusCode: number;
+  validation: {
+    body: {
+      source: string;
+      keys: string[];
+      message: string;
+    };
+  };
 }
 
 export interface IPostFormInput {

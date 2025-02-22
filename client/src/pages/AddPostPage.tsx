@@ -1,3 +1,4 @@
+import ErrorMessage from "../components/ErrorMessage";
 import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchCreatePost } from "../store/posts/actions";
@@ -28,7 +29,7 @@ const AddPostPage = () => {
       }
     });
     dispatch(fetchCreatePost(data));
-    if (!error && !isLoading) {
+    if (error === null && !isLoading) {
       reset();
     }
   };
@@ -80,7 +81,7 @@ const AddPostPage = () => {
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p>{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex gap-8 items-center justify-center mt-4">
         <button

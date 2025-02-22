@@ -22,7 +22,6 @@ class UserService {
 
   async login(email: string, password: string) {
     const user = await UserModel.findOne({ email });
-
     if (!user) {
       throw ApiError.BadRequest(`Пользователь c ${email} не существует`);
     }

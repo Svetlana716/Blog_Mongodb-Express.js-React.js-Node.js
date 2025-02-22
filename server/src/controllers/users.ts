@@ -1,16 +1,12 @@
 import { Response, Request, NextFunction } from "express";
 import { constants } from "http2";
-import { validationResult } from "express-validator";
 import ApiError from "../errors/ApiError";
 import UserService from "../services/users";
+import { Error } from "mongoose";
 
 class UserController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        next(ApiError.BadRequest("Ошибка валидации", errors.array()));
-      }
       const user = await UserService.register(req.body);
       res.cookie("refreshToken", user.refreshToken, {
         maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
@@ -18,16 +14,15 @@ class UserController {
       });
       return res.status(constants.HTTP_STATUS_CREATED).send(user);
     } catch (error) {
+      if (error instanceof Error) {
+        next(ApiError.BadRequest(error.message));
+      }
       next(error);
     }
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        next(ApiError.BadRequest("Ошибка валидации", errors.array()));
-      }
       const { email, password } = req.body;
       const user = await UserService.login(email, password);
       res.cookie("refreshToken", user.refreshToken, {
@@ -36,6 +31,10 @@ class UserController {
       });
       return res.status(constants.HTTP_STATUS_OK).send(user);
     } catch (error) {
+      /* if (error instanceof Error) {
+        console.log(error);
+        next(ApiError.BadRequest(error.message));
+      } */
       next(error);
     }
   }

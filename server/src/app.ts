@@ -27,9 +27,9 @@ app.use(requestLogger);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/api", router);
 
+app.use(errors());
 app.use(error);
 //app.use(errorLogger);
-app.use(errors());
 
 const connect = async () => {
   try {

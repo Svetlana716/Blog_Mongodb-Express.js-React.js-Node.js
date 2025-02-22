@@ -56,7 +56,9 @@ const postsSlice = createSlice({
       .addCase(fetchCreatePost.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -74,7 +76,9 @@ const postsSlice = createSlice({
       .addCase(fetchGetPosts.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -91,7 +95,9 @@ const postsSlice = createSlice({
       .addCase(fetchGetMyPosts.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -108,7 +114,9 @@ const postsSlice = createSlice({
       .addCase(fetchGetPostById.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -128,7 +136,9 @@ const postsSlice = createSlice({
       .addCase(fetchEditPost.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -145,7 +155,9 @@ const postsSlice = createSlice({
       .addCase(fetchDeletePost.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }

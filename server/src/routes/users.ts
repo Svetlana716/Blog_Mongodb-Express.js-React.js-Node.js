@@ -1,22 +1,17 @@
 import { Router } from "express";
 import { Joi, celebrate } from "celebrate";
-import {
-  getUsers,
-  getUserById,
-  updateUserProfile,
-  getCurrentUser,
-} from "../controllers/auth";
+import { upload } from "../services/file";
+import auth from "../middlewares/auth";
+import UserController from "../controllers/users";
 
-const userRouter = Router();
+const usersRouter = Router();
 
-// возвращает информацию о текущем пользователе
-userRouter.get("/me", getCurrentUser);
+usersRouter.get("/", auth, UserController.getAll);
 
-// возвращает всех пользователей
-userRouter.get("/", getUsers);
+export default usersRouter;
 
 // возвращает пользователя по _id
-userRouter.get(
+/*userRouter.get(
   "/:userId",
   celebrate({
     params: Joi.object()
@@ -41,18 +36,4 @@ userRouter.patch(
   }),
   updateUserProfile
 );
-
-// обновляет аватар
-userRouter.patch(
-  "/me/avatar",
-  celebrate({
-    body: Joi.object()
-      .keys({
-        avatar: Joi.string().required(),
-      })
-      .unknown(true),
-  }),
-  updateUserProfile
-);
-
-export default userRouter;
+ */

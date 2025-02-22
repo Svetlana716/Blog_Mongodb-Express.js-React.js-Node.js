@@ -3,6 +3,7 @@ import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchRegistrationUser } from "../store/auth/actions";
+import ErrorMessage from "../components/ErrorMessage";
 
 interface IInput {
   name: string;
@@ -72,7 +73,7 @@ const RegisterPage = () => {
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p className="text-md text-red">{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex gap-8 justify-center mt-4">
         <button

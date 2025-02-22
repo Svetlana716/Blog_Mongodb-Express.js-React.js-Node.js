@@ -2,6 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import { constants } from "http2";
 import ApiError from "../errors/ApiError";
 import PostService from "../services/posts";
+import { Error as MongooseError } from "mongoose";
 
 class PostController {
   async create(req: Request, res: Response, next: NextFunction) {
@@ -10,6 +11,9 @@ class PostController {
       const post = await PostService.create(body, userId, file);
       return res.status(constants.HTTP_STATUS_CREATED).send(post);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
       next(error);
     }
   }
@@ -32,6 +36,9 @@ class PostController {
       const post = await PostService.getOne(id);
       return res.status(constants.HTTP_STATUS_OK).send(post);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest("Невалидный id поста"));
+      }
       next(error);
     }
   }
@@ -45,6 +52,9 @@ class PostController {
       const post = await PostService.getMy(userId);
       return res.status(constants.HTTP_STATUS_OK).send(post);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest("Невалидный id пользователя"));
+      }
       next(error);
     }
   }
@@ -56,6 +66,9 @@ class PostController {
       const updatedPost = await PostService.update(id, userId, body, file);
       return res.status(constants.HTTP_STATUS_OK).send(updatedPost);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
       next(error);
     }
   }
@@ -67,6 +80,9 @@ class PostController {
       await PostService.delete(id, userId);
       return res.status(constants.HTTP_STATUS_OK).send("success");
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest("Невалидный id поста"));
+      }
       next(error);
     }
   }

@@ -14,6 +14,7 @@ import { getPostInfoPath } from "../store/posts/selectors";
 import { useEffect } from "react";
 import Comments from "../components/CommentForm";
 import { IoArrowBackOutline } from "react-icons/io5";
+import ErrorMessage from "../components/ErrorMessage";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -58,7 +59,7 @@ const PostPage = () => {
       {isLoading ? (
         <p>"loading"</p>
       ) : error ? (
-        <p>{error}</p>
+        <ErrorMessage>{error}</ErrorMessage>
       ) : (
         <div className="flex max-lg:flex-col gap-10 py-8">
           <div className="w-full text-primary text-md">

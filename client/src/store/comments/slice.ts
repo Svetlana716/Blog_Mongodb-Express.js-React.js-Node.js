@@ -43,7 +43,9 @@ const commentsSlice = createSlice({
       .addCase(fetchCreateComment.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -60,7 +62,9 @@ const commentsSlice = createSlice({
       .addCase(fetchGetComments.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }

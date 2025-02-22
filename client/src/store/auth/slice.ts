@@ -39,7 +39,9 @@ const authSlice = createSlice({
       .addCase(fetchRegistrationUser.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -57,7 +59,9 @@ const authSlice = createSlice({
       .addCase(fetchLoginUser.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -75,7 +79,9 @@ const authSlice = createSlice({
       .addCase(fetchLogoutUser.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
@@ -93,7 +99,9 @@ const authSlice = createSlice({
       .addCase(fetchCheckAuth.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.error = action.payload.message;
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
         } else {
           state.error = action.error.message;
         }
