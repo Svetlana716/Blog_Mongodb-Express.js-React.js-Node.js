@@ -1,10 +1,6 @@
 import { useState } from "react";
 
-type InputType = {
-  [key: string]: string | File | null;
-};
-
-export function useForm<T>(inputValues: InputType) {
+export function useForm<T>(inputValues: T) {
   const [values, setValues] = useState(inputValues as T);
 
   const handleChange = (
@@ -19,8 +15,12 @@ export function useForm<T>(inputValues: InputType) {
     }
   };
 
+  const setNewValues = (val: T) => {
+    setValues(val);
+  };
+
   const reset = () => {
     setValues(inputValues as T);
   };
-  return { values, handleChange, reset };
+  return { values, handleChange, setNewValues, reset };
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { Joi, celebrate } from "celebrate";
-import UserController from "../controllers/users";
+import { celebrate } from "celebrate";
+import AuthController from "../controllers/auth";
 import { loginSchema, registerSchema } from "../validations/auth";
 
 const authRouter = Router();
@@ -8,12 +8,12 @@ const authRouter = Router();
 authRouter.post(
   "/register",
   celebrate(registerSchema),
-  UserController.register
+  AuthController.register
 );
 
-authRouter.post("/login", celebrate(loginSchema), UserController.login);
+authRouter.post("/login", celebrate(loginSchema), AuthController.login);
 
-authRouter.post("/logout", UserController.logout);
-authRouter.get("/refresh", UserController.refresh);
+authRouter.post("/logout", AuthController.logout);
+authRouter.get("/refresh", AuthController.refresh);
 
 export default authRouter;

@@ -20,3 +20,9 @@ export interface IPostFormInput {
 export interface ICommentFormInput {
   text: string;
 }
+
+export interface IProfileFormInput {
+  name: string;
+  description: string;
+  avatar: File | string;
+}

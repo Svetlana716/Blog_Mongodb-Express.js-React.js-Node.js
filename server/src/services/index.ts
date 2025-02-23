@@ -2,7 +2,7 @@ import { Router } from "express";
 import { body } from "express-validator";
 import auth from "../middlewares/auth";
 import PostController from "../controllers/posts";
-import UserController from "../controllers/users";
+import UserController from "../controllers/auth";
 import { upload } from "../services/file";
 
 const router = Router({ mergeParams: true });

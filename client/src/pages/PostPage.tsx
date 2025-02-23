@@ -80,7 +80,7 @@ const PostPage = () => {
             </div>
 
             <div className="flex justify-between items-center pt-2">
-              <p className="opacity-50">{post.title}</p>
+              <p className="opacity-50">{post.author.name}</p>
               <p className=" opacity-50">
                 {FormatDate.dayMonthYear(post.createdAt)}
               </p>
@@ -99,7 +99,7 @@ const PostPage = () => {
                 </div>
               </div>
 
-              {user?.id === post.author && (
+              {user?.id === post.author.id && (
                 <div className="flex gap-3 mt-4">
                   <Link to={`/posts/${id}/edit`}>
                     <AiTwotoneEdit

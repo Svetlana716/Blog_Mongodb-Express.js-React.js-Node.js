@@ -12,6 +12,7 @@ import { useAppDispatch } from "../store/hooks";
 import { fetchCheckAuth } from "../store/auth/actions";
 import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute";
 import NotFoundPage from "../pages/NotFoundPage";
+import MyProfilePage from "../pages/MyProfilePage";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -32,6 +33,10 @@ function App() {
         <Route
           path="login"
           element={<OnlyUnAuth component={<LoginPage />} />}
+        />
+        <Route
+          path="myProfile"
+          element={<OnlyAuth component={<MyProfilePage />} />}
         />
         <Route path="/" element={<MainPage />} />
         <Route path="posts/:id" element={<PostPage />} />

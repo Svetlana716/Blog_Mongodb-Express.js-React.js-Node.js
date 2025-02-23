@@ -7,6 +7,9 @@ import useResize from "../hooks/useResize";
 import { useState } from "react";
 import { IoMoon, IoSunny } from "react-icons/io5";
 import { useTheme } from "../hooks/useTheme";
+import Avatar from "./Avatar";
+
+//TODO: декомпозировать Header
 
 const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -154,12 +157,15 @@ const Header = () => {
           </button>
         )}
         {isAuth && !isMobile && (
-          <button
-            onClick={handleLogout}
-            className="button bg-secondary text-md text-primary block-hover"
-          >
-            Выйти
-          </button>
+          <>
+            <button
+              onClick={handleLogout}
+              className="button bg-secondary text-md text-primary block-hover"
+            >
+              Выйти
+            </button>
+            <Avatar />
+          </>
         )}
         {!isAuth && !(location.pathname === "/login") && (
           <Link

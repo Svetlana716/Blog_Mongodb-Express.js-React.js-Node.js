@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { fetchEditPost, fetchGetPostById } from "../store/posts/actions";
@@ -7,9 +7,11 @@ import { IPostFormInput } from "../utils/types";
 import { useEffect } from "react";
 import { staticFilesURL } from "../utils/constants";
 import ErrorMessage from "../components/ErrorMessage";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const EditPostPage = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const { posts, currentPost, isLoading, error } =
     useAppSelector(getPostInfoPath);
@@ -50,73 +52,84 @@ const EditPostPage = () => {
     dispatch(fetchEditPost({ id, formData }));
   };
 
+  const handleBackClick = () => {
+    navigate(-1);
+  };
+
   return (
-    <form className="w-1/2 mx-auto py-10" onSubmit={handleEditPost}>
-      <label htmlFor="picture">
-        <input
-          id="picture"
-          type="file"
-          name="picture"
-          className="mt-2 border-5 border-dotted border-text-hover-dark dark:border-bg-primary-dark  text-text-primary-dark dark:text-text-primary w-full rounded-sm bg-stone-800 dark:bg-amber-200  p-4 text-md outline-none placeholder:text-gray-700 cursor-pointer h-15"
-          onChange={handleChange}
-        />
-      </label>
-      <div className="flex object-cover py-2">
-        {post && !picture && (
-          <img
-            className="m-auto"
-            src={`${staticFilesURL}/${post.picture}`}
-            alt="image"
+    <>
+      <IoArrowBackOutline
+        className="text-primary text-hover"
+        size={25}
+        onClick={handleBackClick}
+      />
+      <form className="w-1/2 mx-auto py-10" onSubmit={handleEditPost}>
+        <label htmlFor="picture">
+          <input
+            id="picture"
+            type="file"
+            name="picture"
+            className="mt-2 border-5 border-dotted border-text-hover-dark dark:border-bg-primary-dark  text-text-primary-dark dark:text-text-primary w-full rounded-sm bg-stone-800 dark:bg-amber-200  p-4 text-md outline-none placeholder:text-gray-700 cursor-pointer h-15"
+            onChange={handleChange}
           />
-        )}
+        </label>
+        <div className="flex object-cover py-2">
+          {post && !picture && (
+            <img
+              className="m-auto h-80"
+              src={`${staticFilesURL}/${post.picture}`}
+              alt="image"
+            />
+          )}
 
-        {picture && (
-          <img src={URL.createObjectURL(picture as File)} alt="image" />
-        )}
-      </div>
-      <label htmlFor="title">
-        Post title:
-        <input
-          id="title"
-          type="text"
-          name="title"
-          value={title}
-          onChange={handleChange}
-          placeholder="title"
-          className="input"
-        />
-      </label>
-      <label className="text-xs text-white opacity-70" htmlFor="text">
-        Post text:
-        <textarea
-          id="text"
-          name={"text"}
-          value={text}
-          onChange={handleChange}
-          placeholder="post text"
-          className="input h-50"
-        />
-      </label>
+          {picture && (
+            <img src={URL.createObjectURL(picture as File)} alt="image" />
+          )}
+        </div>
+        <label htmlFor="title">
+          Post title:
+          <input
+            id="title"
+            type="text"
+            name="title"
+            value={title}
+            onChange={handleChange}
+            placeholder="title"
+            className="input"
+          />
+        </label>
+        <label className="text-xs text-white opacity-70" htmlFor="text">
+          Post text:
+          <textarea
+            id="text"
+            name={"text"}
+            value={text}
+            onChange={handleChange}
+            placeholder="post text"
+            className="input h-50"
+          />
+        </label>
 
-      {isLoading && <p>"Загрузка..."</p>}
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+        {isLoading && <p>"Загрузка..."</p>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
 
-      <div className="flex gap-8 items-center justify-center mt-4">
-        <button
-          type="submit"
-          className="button text-md text-primary bg-secondary block-hover"
-        >
-          Подтвердить
-        </button>
-        <button
-          type="reset"
-          onClick={reset}
-          className="button text-md text-primary block-hover outline-2"
-        >
-          Сбросить
-        </button>
-      </div>
-    </form>
+        <div className="flex gap-8 items-center justify-center mt-4">
+          <button
+            type="submit"
+            className="button text-md text-primary bg-secondary block-hover"
+          >
+            Подтвердить
+          </button>
+          <button
+            type="reset"
+            onClick={reset}
+            className="button text-md text-primary block-hover outline-2"
+          >
+            Сбросить
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 export default EditPostPage;

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Joi, celebrate } from "celebrate";
+import { celebrate } from "celebrate";
 import { upload } from "../services/file";
 import auth from "../middlewares/auth";
 import PostController from "../controllers/posts";
@@ -12,7 +12,7 @@ postsRouter.post(
   "/",
   auth,
   upload.single("picture"), // в upload.single("название поля формы")
-  /* celebrate(createPostSchema), */
+  celebrate(createPostSchema),
   PostController.create
 );
 
@@ -20,7 +20,7 @@ postsRouter.get("/", PostController.getAll);
 
 postsRouter.get("/my", auth, PostController.getMy);
 
-postsRouter.put(
+postsRouter.patch(
   "/:id",
   auth,
   upload.single("picture"),

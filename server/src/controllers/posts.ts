@@ -6,8 +6,8 @@ import { Error as MongooseError } from "mongoose";
 
 class PostController {
   async create(req: Request, res: Response, next: NextFunction) {
-    const { body, userId, file } = req;
     try {
+      const { body, userId, file } = req;
       const post = await PostService.create(body, userId, file);
       return res.status(constants.HTTP_STATUS_CREATED).send(post);
     } catch (error) {

@@ -50,7 +50,7 @@ const AddPostPage = () => {
       <div className="flex object-cover py-2">
         {picture && (
           <img
-            className="m-auto"
+            className="m-auto h-80"
             src={URL.createObjectURL(picture as File)}
             alt="image"
           />

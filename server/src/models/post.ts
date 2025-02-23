@@ -17,12 +17,21 @@ const postSchema = new Schema<IPost>(
     },
     picture: {
       type: String,
+      required: false,
       default: "",
     },
     author: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "user",
+      id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+      },
+      name: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 30,
+      },
     },
     views: {
       type: Number,
@@ -43,25 +52,3 @@ const postSchema = new Schema<IPost>(
 );
 
 export default model("post", postSchema);
-
-/* link: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (v: string) => validator.isURL(v),
-        message: "Введен не валидный URL",
-      },
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "user",
-    },
-    likes: {
-      type: [{ type: Schema.Types.ObjectId, ref: "user" }],
-      default: [],
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    }, */

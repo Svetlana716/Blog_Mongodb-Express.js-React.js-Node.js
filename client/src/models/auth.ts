@@ -11,6 +11,9 @@ export interface ICredentials {
   password: string;
 }
 
-export interface IRegistration extends ICredentials {
+export interface IRegistration {
   name: string;
+  email: string;
+  password1: string;
+  password2: string;
 }

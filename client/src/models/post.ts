@@ -2,7 +2,10 @@ export interface IPost {
   _id: string;
   title: string;
   text: string;
-  author: string;
+  author: {
+    id: string;
+    name: string;
+  };
   picture?: string;
   views: number;
   comments?: [];
