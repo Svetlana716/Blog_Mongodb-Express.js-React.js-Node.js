@@ -1,6 +1,18 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUser, logoutUser, registrationUser } from "../../services/auth";
-import { IAuthResponse, ICredentials, IRegistration } from "../../models/auth";
+import {
+  changeEmail,
+  changePassword,
+  loginUser,
+  logoutUser,
+  registrationUser,
+} from "../../services/auth";
+import {
+  IAuthResponse,
+  ICredentials,
+  IEmailChange,
+  IPasswordChange,
+  IRegistration,
+} from "../../models/auth";
 import axios, { AxiosError } from "axios";
 import { URL } from "../../utils/constants";
 import { IResponseError } from "../../utils/types";
@@ -47,6 +59,52 @@ export const fetchLoginUser = createAsyncThunk<
     return rejectWithValue(error.response.data);
   }
 });
+
+export const fetchChangeEmail = createAsyncThunk<
+  IAuthResponse,
+  IEmailChange,
+  {
+    rejectValue: IResponseError;
+  }
+>(
+  "user/changeEmail",
+  async (credentials: IEmailChange, { rejectWithValue }) => {
+    try {
+      const { data } = await changeEmail(credentials);
+      localStorage.setItem("token", data.accessToken);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<IResponseError>;
+      if (!error.response) {
+        throw err;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchChangePassword = createAsyncThunk<
+  IAuthResponse,
+  IPasswordChange,
+  {
+    rejectValue: IResponseError;
+  }
+>(
+  "user/changePassword",
+  async (credentials: IPasswordChange, { rejectWithValue }) => {
+    try {
+      const { data } = await changePassword(credentials);
+      localStorage.setItem("token", data.accessToken);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<IResponseError>;
+      if (!error.response) {
+        throw err;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const fetchLogoutUser = createAsyncThunk<
   void,

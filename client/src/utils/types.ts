@@ -21,7 +21,7 @@ export interface ICommentFormInput {
   text: string;
 }
 
-export interface IProfileFormInput {
+export interface ICoreSettingsFormInput {
   name: string;
   description: string;
   avatar: File | string;

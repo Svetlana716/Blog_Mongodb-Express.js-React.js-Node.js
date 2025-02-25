@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from "express";
 import { constants } from "http2";
 import ApiError from "../errors/ApiError";
 import AuthService from "../services/auth";
-import { Error } from "mongoose";
+import { Error as MongooseError } from "mongoose";
 
 class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
@@ -14,7 +14,7 @@ class AuthController {
       });
       return res.status(constants.HTTP_STATUS_CREATED).send(user);
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof MongooseError) {
         next(ApiError.BadRequest(error.message));
       }
       next(error);
@@ -23,16 +23,50 @@ class AuthController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      const { email, password } = req.body;
-      const user = await AuthService.login(email, password);
+      const user = await AuthService.login(req.body);
       res.cookie("refreshToken", user.refreshToken, {
         maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
         httpOnly: true, // для того чтобы не получить доступ к кукам из JS
       });
       return res.status(constants.HTTP_STATUS_OK).send(user);
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof MongooseError) {
         console.log(error);
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async changeEmail(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { body, userId } = req;
+      const user = await AuthService.changeEmail(body, userId);
+      res.cookie("refreshToken", user.refreshToken, {
+        maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
+        httpOnly: true, // для того чтобы не получить доступ к кукам из JS
+      });
+      return res.status(constants.HTTP_STATUS_OK).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { body, userId } = req;
+      const user = await AuthService.changePassword(body, userId);
+      console.log(user);
+      res.cookie("refreshToken", user.refreshToken, {
+        maxAge: 3600000 * 24 * 10,
+        httpOnly: true,
+      });
+      return res.status(constants.HTTP_STATUS_OK).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
         next(ApiError.BadRequest(error.message));
       }
       next(error);

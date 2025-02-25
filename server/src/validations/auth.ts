@@ -19,3 +19,23 @@ export const loginSchema = {
     })
     .unknown(true),
 };
+
+export const changeUserEmail = {
+  body: Joi.object()
+    .keys({
+      currentEmail: Joi.string().email(),
+      newEmail: Joi.string().email(),
+      password: Joi.string().min(8),
+    })
+    .unknown(true),
+};
+
+export const changeUserPassword = {
+  body: Joi.object()
+    .keys({
+      currentPassword: Joi.string().min(8),
+      newPassword1: Joi.string().min(8),
+      newPassword2: Joi.string().min(8),
+    })
+    .unknown(true),
+};

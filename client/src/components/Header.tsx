@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchLogoutUser } from "../store/auth/actions";
@@ -8,6 +8,7 @@ import { useState } from "react";
 import { IoMoon, IoSunny } from "react-icons/io5";
 import { useTheme } from "../hooks/useTheme";
 import Avatar from "./Avatar";
+import NavBar from "./NavBar";
 
 //TODO: декомпозировать Header
 
@@ -20,13 +21,24 @@ const Header = () => {
 
   const { darkTheme, setDarkTheme } = useTheme();
 
-  const activeStyles = {
-    color: darkTheme ? "#d6e736" : "#FAFAFA",
-  };
-
   const handleLogout = () => {
     dispatch(fetchLogoutUser());
   };
+
+  const navLinks = [
+    {
+      heading: "Главная",
+      link: "/",
+    },
+    {
+      heading: "Мои посты",
+      link: "/myPosts",
+    },
+    {
+      heading: "Добавить пост",
+      link: "/posts/new",
+    },
+  ];
 
   return (
     <header className="flex py-4 justify-between items-center">
@@ -115,35 +127,7 @@ const Header = () => {
             </div>
           </section>
 
-          <ul className="hidden space-x-8 sm:flex">
-            <li>
-              <NavLink
-                to="/"
-                className="font-semibold text-primary text-lg text-hover"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Главная
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/myPosts"
-                className="font-semibold text-primary text-lg text-hover"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Мои посты
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/posts/new"
-                className="font-semibold text-primary text-lg text-hover"
-                style={({ isActive }) => (isActive ? activeStyles : undefined)}
-              >
-                Добавить пост
-              </NavLink>
-            </li>
-          </ul>
+          <NavBar links={navLinks} styles="max-sm:hidden" />
         </nav>
       )}
       <div className="flex gap-10">

@@ -19,7 +19,6 @@ const userSchema = new Schema<IUser>(
     avatar: {
       type: String,
       required: false,
-      default: "",
     },
     email: {
       type: String,

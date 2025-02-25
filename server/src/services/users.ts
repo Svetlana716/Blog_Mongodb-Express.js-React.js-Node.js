@@ -1,6 +1,6 @@
 import UserModel from "../models/user";
 import ApiError from "../errors/ApiError";
-import { IRegisterUser, IUser } from "types/IUser";
+import { IChangeEmail, IRegisterUser, IUser } from "types/IUser";
 
 class UsersService {
   async getMe(id: string) {

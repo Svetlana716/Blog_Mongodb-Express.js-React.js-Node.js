@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  fetchChangeEmail,
+  fetchChangePassword,
   fetchCheckAuth,
   fetchLoginUser,
   fetchLogoutUser,
@@ -57,6 +59,46 @@ const authSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(fetchLoginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchChangeEmail.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchChangeEmail.fulfilled, (state, { payload }) => {
+        state.user = payload!.user;
+        state.isAuth = true;
+        state.isLoading = false;
+      })
+      .addCase(fetchChangeEmail.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload) {
+          state.error = action.payload.validation
+            ? action.payload.validation.body.message
+            : action.payload.message;
+        } else {
+          state.error = action.error.message;
+        }
+      })
+
+      .addCase(fetchChangePassword.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchChangePassword.fulfilled, (state, { payload }) => {
+        state.user = payload!.user;
+        state.isAuth = true;
+        state.isLoading = false;
+      })
+      .addCase(fetchChangePassword.rejected, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
           state.error = action.payload.validation
