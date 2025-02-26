@@ -9,7 +9,7 @@ interface Props {
 const CommentItem: FC<Props> = ({ comment }) => {
   return (
     <div className="flex items-center gap-3">
-      <Avatar />
+      <Avatar user={comment.author} />
       <div className="flex text-primary text-sm">{comment.text}</div>
     </div>
   );

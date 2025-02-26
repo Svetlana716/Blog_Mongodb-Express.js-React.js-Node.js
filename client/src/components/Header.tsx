@@ -16,7 +16,7 @@ const Header = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const dispatch = useAppDispatch();
   const location = useLocation();
-  const { isAuth } = useAppSelector(getAuthInfoPath);
+  const { isAuth, user } = useAppSelector(getAuthInfoPath);
   const { isMobile } = useResize();
 
   const { darkTheme, setDarkTheme } = useTheme();
@@ -140,7 +140,7 @@ const Header = () => {
             )}
           </button>
         )}
-        {isAuth && !isMobile && (
+        {isAuth && user && !isMobile && (
           <>
             <button
               onClick={handleLogout}
@@ -148,7 +148,7 @@ const Header = () => {
             >
               Выйти
             </button>
-            <Avatar />
+            <Avatar user={user} />
           </>
         )}
         {!isAuth && !(location.pathname === "/login") && (

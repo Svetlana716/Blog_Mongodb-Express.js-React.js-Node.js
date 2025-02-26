@@ -23,11 +23,13 @@ class AuthService {
     }
     const hash = await bcrypt.hash(password1, 10);
     const newUser = await UserModel.create({ email, password: hash, name });
-
+    const tokens = await TokenService.generate({
+      id: newUser.id,
+      email: newUser.email,
+    });
+    await TokenService.save(newUser.id, tokens.refreshToken);
     const userDto = new UserDto(newUser);
-    const tokens = await TokenService.generate({ ...userDto });
-    await TokenService.save(userDto.id, tokens.refreshToken);
-    return { ...tokens, user: newUser };
+    return { ...tokens, user: userDto };
   }
 
   async login(body: ICredentials) {
@@ -41,9 +43,13 @@ class AuthService {
     if (!isPassEquals) {
       throw ApiError.BadRequest(`Неверный пароль`);
     }
+
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
     const userDto = new UserDto(user);
-    const tokens = await TokenService.generate({ ...userDto });
-    await TokenService.save(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 
@@ -68,9 +74,12 @@ class AuthService {
 
     user.email = newEmail;
 
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
     const userDto = new UserDto(user);
-    const tokens = await TokenService.generate({ ...userDto });
-    await TokenService.save(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 
@@ -92,9 +101,12 @@ class AuthService {
 
     user!.password = hash;
 
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
     const userDto = new UserDto(user);
-    const tokens = await TokenService.generate({ ...userDto });
-    await TokenService.save(userDto.id, tokens.refreshToken);
     return { ...tokens, user: userDto };
   }
 
@@ -115,10 +127,18 @@ class AuthService {
     }
     const { email } = userData;
     const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      throw ApiError.BadRequest(`Пользователь c ${email} не существует`);
+    }
+
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
     const userDto = new UserDto(user);
-    const tokens = await TokenService.generate({ ...userDto });
-    await TokenService.save(userDto.id, tokens.refreshToken);
-    return { ...tokens, user: user };
+    return { ...tokens, user: userDto };
   }
 }
 

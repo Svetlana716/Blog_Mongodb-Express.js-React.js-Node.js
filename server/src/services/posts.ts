@@ -1,6 +1,7 @@
 import PostModel from "../models/post";
 import UserModel from "../models/user";
 import ApiError from "../errors/ApiError";
+import UserDto from "../dtos/user";
 import { IPost } from "types/IPost";
 
 class PostService {
@@ -9,15 +10,17 @@ class PostService {
     userId: string,
     picture: Express.Multer.File | undefined
   ) {
-    const user = await UserModel.findById(userId);
-    const author = { id: userId, name: user?.name };
+    const user = await UserModel.findById(userId).orFail(
+      ApiError.NotFoundError(`Нет пользователя с id: ${userId}`)
+    );
+    const userDto = new UserDto(user);
     const newPost = picture
       ? new PostModel({
           ...post,
-          author,
+          author: userDto,
           picture: picture?.filename,
         })
-      : new PostModel({ ...post, author });
+      : new PostModel({ ...post, author: userDto });
     await newPost.save();
 
     user?.posts?.push(newPost);
