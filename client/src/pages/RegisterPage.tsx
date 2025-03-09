@@ -3,11 +3,13 @@ import { useForm } from "../hooks/useForm";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getAuthInfoPath } from "../store/auth/selectors";
 import { fetchRegistrationUser } from "../store/auth/actions";
+import ErrorMessage from "../components/ErrorMessage";
 
 interface IInput {
   name: string;
   email: string;
-  password: string;
+  password1: string;
+  password2: string;
 }
 
 const RegisterPage = () => {
@@ -17,14 +19,15 @@ const RegisterPage = () => {
   const { values, handleChange } = useForm<IInput>({
     name: "",
     email: "",
-    password: "",
+    password1: "",
+    password2: "",
   });
 
-  const { name, email, password } = values;
+  const { name, email, password1, password2 } = values;
 
   const handleRegisterUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(fetchRegistrationUser({ name, email, password }));
+    dispatch(fetchRegistrationUser({ name, email, password1, password2 }));
   };
   return (
     <form
@@ -42,6 +45,7 @@ const RegisterPage = () => {
           placeholder="имя"
           value={name}
           name={"name"}
+          autoComplete="off"
           onChange={handleChange}
           className="input mb-5"
         />
@@ -54,25 +58,40 @@ const RegisterPage = () => {
           placeholder="email"
           value={email}
           name={"email"}
+          autoComplete="off"
           onChange={handleChange}
           className="input mb-5"
         />
       </label>
-      <label className="text-md text-primary" htmlFor="password">
+      <label className="text-md text-primary" htmlFor="password1">
         пароль:
         <input
-          id="password"
+          id="password1"
           type="password"
           placeholder="password"
-          value={password}
-          name={"password"}
+          value={password1}
+          name={"password1"}
+          autoComplete="off"
+          onChange={handleChange}
+          className="input mb-5"
+        />
+      </label>
+      <label className="text-md text-primary" htmlFor="password2">
+        повторите пароль:
+        <input
+          id="password2"
+          type="password"
+          placeholder="password"
+          value={password2}
+          name={"password2"}
+          autoComplete="off"
           onChange={handleChange}
           className="input mb-5"
         />
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p className="text-md text-red">{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex gap-8 justify-center mt-4">
         <button

@@ -4,6 +4,7 @@ import { FC } from "react";
 import { useForm } from "../hooks/useForm";
 import { fetchLoginUser } from "../store/auth/actions";
 import { getAuthInfoPath } from "../store/auth/selectors";
+import ErrorMessage from "../components/ErrorMessage";
 
 interface IInput {
   email: string;
@@ -59,7 +60,7 @@ const LoginPage: FC = () => {
       </label>
 
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p className="text-md text-red">{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
 
       <div className="flex gap-8 justify-center mt-4">
         <button

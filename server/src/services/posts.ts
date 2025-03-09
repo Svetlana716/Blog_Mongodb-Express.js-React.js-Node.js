@@ -1,6 +1,7 @@
 import PostModel from "../models/post";
 import UserModel from "../models/user";
 import ApiError from "../errors/ApiError";
+import UserDto from "../dtos/user";
 import { IPost } from "types/IPost";
 
 class PostService {
@@ -9,17 +10,21 @@ class PostService {
     userId: string,
     picture: Express.Multer.File | undefined
   ) {
+    const user = await UserModel.findById(userId).orFail(
+      ApiError.NotFoundError(`Нет пользователя с id: ${userId}`)
+    );
+    const userDto = new UserDto(user);
     const newPost = picture
       ? new PostModel({
           ...post,
-          author: userId,
+          author: userDto,
           picture: picture?.filename,
         })
-      : new PostModel({ ...post, author: userId });
+      : new PostModel({ ...post, author: userDto });
     await newPost.save();
-    await UserModel.findByIdAndUpdate(userId, {
-      $push: { posts: newPost },
-    });
+
+    user?.posts?.push(newPost);
+    await user!.save();
     return newPost;
   }
 
@@ -57,14 +62,12 @@ class PostService {
     body: Partial<IPost>,
     picture: Express.Multer.File | undefined
   ) {
-    const post = await PostModel.findById(postId);
-
-    if (!post) {
-      throw ApiError.NotFoundError("Нет поста");
-    }
+    const post = await PostModel.findById(postId).orFail(
+      ApiError.NotFoundError(`Нет поста с id: ${postId}`)
+    );
 
     if (post && post.author._id.toString() !== userId) {
-      throw ApiError.BadRequest("Нельзя удалять чужие посты");
+      throw ApiError.BadRequest("Нельзя редактировать чужие посты");
     }
 
     return await PostModel.findByIdAndUpdate(

@@ -1,14 +1,17 @@
 import { constants } from "http2";
-import { ValidationError } from "express-validator";
+import { Error } from "mongoose";
 
 class ApiError extends Error {
-  status;
-  errors;
+  public status: number;
+  public error: Error | undefined;
 
-  constructor(status: number, message: string, errors: ValidationError[] = []) {
+  constructor(status: number, message: string) {
     super(message);
     this.status = status;
-    this.errors = errors;
+  }
+
+  static BadRequest(message: string) {
+    return new ApiError(constants.HTTP_STATUS_BAD_REQUEST, message);
   }
 
   static UnauthorizedError() {
@@ -16,10 +19,6 @@ class ApiError extends Error {
       constants.HTTP_STATUS_UNAUTHORIZED,
       "Пользователь не авторизирован"
     );
-  }
-
-  static BadRequest(message: string, errors: ValidationError[] = []) {
-    return new ApiError(constants.HTTP_STATUS_BAD_REQUEST, message, errors);
   }
 
   static ForbiddenError() {

@@ -14,6 +14,7 @@ import { getPostInfoPath } from "../store/posts/selectors";
 import { useEffect } from "react";
 import Comments from "../components/CommentForm";
 import { IoArrowBackOutline } from "react-icons/io5";
+import ErrorMessage from "../components/ErrorMessage";
 
 const PostPage = () => {
   const { id } = useParams();
@@ -58,7 +59,7 @@ const PostPage = () => {
       {isLoading ? (
         <p>"loading"</p>
       ) : error ? (
-        <p>{error}</p>
+        <ErrorMessage>{error}</ErrorMessage>
       ) : (
         <div className="flex max-lg:flex-col gap-10 py-8">
           <div className="w-full text-primary text-md">
@@ -79,7 +80,7 @@ const PostPage = () => {
             </div>
 
             <div className="flex justify-between items-center pt-2">
-              <p className="opacity-50">{post.title}</p>
+              <p className="opacity-50">{post.author.name}</p>
               <p className=" opacity-50">
                 {FormatDate.dayMonthYear(post.createdAt)}
               </p>
@@ -98,7 +99,7 @@ const PostPage = () => {
                 </div>
               </div>
 
-              {user?.id === post.author && (
+              {user?.id === post.author.id && (
                 <div className="flex gap-3 mt-4">
                   <Link to={`/posts/${id}/edit`}>
                     <AiTwotoneEdit

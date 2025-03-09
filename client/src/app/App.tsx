@@ -12,6 +12,9 @@ import { useAppDispatch } from "../store/hooks";
 import { fetchCheckAuth } from "../store/auth/actions";
 import { OnlyAuth, OnlyUnAuth } from "./ProtectedRoute";
 import NotFoundPage from "../pages/NotFoundPage";
+import MyProfilePage from "../pages/MyProfilePage";
+import CoreSettingsForm from "../components/CoreSettingsForm";
+import CredentialsSettingsForm from "../components/CredentialsSetting";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -33,6 +36,19 @@ function App() {
           path="login"
           element={<OnlyUnAuth component={<LoginPage />} />}
         />
+        <Route
+          path="myProfile"
+          element={<OnlyAuth component={<MyProfilePage />} />}
+        >
+          <Route
+            path="core"
+            element={<OnlyAuth component={<CoreSettingsForm />} />}
+          />
+          <Route
+            path="credentials"
+            element={<OnlyAuth component={<CredentialsSettingsForm />} />}
+          />
+        </Route>
         <Route path="/" element={<MainPage />} />
         <Route path="posts/:id" element={<PostPage />} />
 

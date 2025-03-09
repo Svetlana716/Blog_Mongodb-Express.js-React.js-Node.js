@@ -32,7 +32,7 @@ const PostItem: FC<Props> = ({ post }) => {
           )}
         </div>
         <div className="flex justify-between items-center pt-2">
-          <p className="opacity-50">{post.title}</p>
+          <p className="opacity-50">{post.author.name}</p>
           <p className=" opacity-50">
             {FormatDate.dayMonthYear(post.createdAt)}
           </p>

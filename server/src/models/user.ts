@@ -4,6 +4,22 @@ import { IUser } from "../types/IUser";
 
 const userSchema = new Schema<IUser>(
   {
+    name: {
+      type: String,
+      required: true,
+      minlength: 2,
+      maxlength: 30,
+    },
+    description: {
+      type: String,
+      required: false,
+      default: "",
+      maxlength: 200,
+    },
+    avatar: {
+      type: String,
+      required: false,
+    },
     email: {
       type: String,
       required: true,
@@ -18,13 +34,6 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 8,
     },
-    name: {
-      type: String,
-      required: true,
-      default: "",
-      minlength: 2,
-      maxlength: 30,
-    },
     posts: [
       {
         required: false,
@@ -32,23 +41,6 @@ const userSchema = new Schema<IUser>(
         ref: "post",
       },
     ],
-    /* about: {
-      type: String,
-      required: false,
-      default: "",
-      minlength: 2,
-      maxlength: 200,
-    },
-    avatar: {
-      type: String,
-      required: false,
-      validate: {
-        validator: (v: string) => validator.isURL(v),
-        message: "Введен не валидный URL",
-      },
-      default: "",
-    },
-     */
   },
   {
     versionKey: false,
@@ -57,28 +49,3 @@ const userSchema = new Schema<IUser>(
 );
 
 export default model<IUser>("user", userSchema);
-
-/* interface UserModel extends Model<IUser> {
-  findUserByCredentials: (
-    email: string,
-    password: string
-  ) => Promise<Document<unknown, any, IUser>>;
-}
-async function findUserByCredentials(
-  this: UserModel,
-  email: string,
-  password: string
-) {
-  const user = await this.findOne({
-    email,
-  })
-    .select("+password")
-    .orFail(new AuthError("Неправильные почта или пароль"));
-  const matched = await bcrypt.compare(password, user.password);
-  if (!matched) {
-    throw new AuthError("Неправильные почта или пароль");
-  }
-  return user;
-}
-
-userSchema.static("findUserByCredentials", findUserByCredentials); */

@@ -10,9 +10,21 @@ const commentSchema = new Schema<IComment>(
       maxlength: 30,
     },
     author: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "user",
+      id: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: "User",
+      },
+      name: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 30,
+      },
+      avatar: {
+        type: String,
+        required: false,
+      },
     },
   },
   {

@@ -8,6 +8,7 @@ import { getCommentsInfoPath } from "../store/comments/selectors";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { ICommentFormInput } from "../utils/types";
 import CommentItem from "./CommentItem";
+import ErrorMessage from "./ErrorMessage";
 
 interface Props {
   id: string;
@@ -52,9 +53,8 @@ const Comments: FC<Props> = ({ id }) => {
           Отправить
         </button>
       </form>
-
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       {isLoading && <p>"Загрузка..."</p>}
-      {error && <p>{error}</p>}
 
       {comments?.map((comment) => (
         <CommentItem key={comment._id} comment={comment} />

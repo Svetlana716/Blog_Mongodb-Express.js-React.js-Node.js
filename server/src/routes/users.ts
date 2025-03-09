@@ -1,58 +1,23 @@
 import { Router } from "express";
-import { Joi, celebrate } from "celebrate";
-import {
-  getUsers,
-  getUserById,
-  updateUserProfile,
-  getCurrentUser,
-} from "../controllers/auth";
+import { celebrate } from "celebrate";
+import { upload } from "../services/file";
+import auth from "../middlewares/auth";
+import { getByIdSchema } from "../validations/common";
+import UsersController from "../controllers/users";
+import { updateUserSchema } from "../validations/users";
 
-const userRouter = Router();
+const usersRouter = Router();
 
-// возвращает информацию о текущем пользователе
-userRouter.get("/me", getCurrentUser);
+usersRouter.get("/me", auth, UsersController.getMe);
 
-// возвращает всех пользователей
-userRouter.get("/", getUsers);
-
-// возвращает пользователя по _id
-userRouter.get(
-  "/:userId",
-  celebrate({
-    params: Joi.object()
-      .keys({
-        userId: Joi.string().length(24).hex().required(),
-      })
-      .unknown(true),
-  }),
-  getUserById
-);
-
-// обновляет профиль
-userRouter.patch(
+usersRouter.patch(
   "/me",
-  celebrate({
-    body: Joi.object()
-      .keys({
-        name: Joi.string().min(2).max(30),
-        about: Joi.string().min(2).max(200),
-      })
-      .unknown(true),
-  }),
-  updateUserProfile
+  auth,
+  upload.single("avatar"),
+  celebrate(updateUserSchema),
+  UsersController.update
 );
 
-// обновляет аватар
-userRouter.patch(
-  "/me/avatar",
-  celebrate({
-    body: Joi.object()
-      .keys({
-        avatar: Joi.string().required(),
-      })
-      .unknown(true),
-  }),
-  updateUserProfile
-);
+usersRouter.get("/:id", celebrate(getByIdSchema), UsersController.getOne);
 
-export default userRouter;
+export default usersRouter;

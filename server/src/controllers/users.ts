@@ -1,142 +1,51 @@
 import { Response, Request, NextFunction } from "express";
 import { constants } from "http2";
-import { validationResult } from "express-validator";
 import ApiError from "../errors/ApiError";
-import UserService from "../services/users";
+import UsersService from "../services/users";
+import { Error as MongooseError } from "mongoose";
 
-class UserController {
-  async register(req: Request, res: Response, next: NextFunction) {
+class UsersController {
+  async getMe(req: Request, res: Response, next: NextFunction) {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        next(ApiError.BadRequest("Ошибка валидации", errors.array()));
-      }
-      const user = await UserService.register(req.body);
-      res.cookie("refreshToken", user.refreshToken, {
-        maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
-        httpOnly: true, // для того чтобы не получить доступ к кукам из JS
-      });
-      return res.status(constants.HTTP_STATUS_CREATED).send(user);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async login(req: Request, res: Response, next: NextFunction) {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        next(ApiError.BadRequest("Ошибка валидации", errors.array()));
-      }
-      const { email, password } = req.body;
-      const user = await UserService.login(email, password);
-      res.cookie("refreshToken", user.refreshToken, {
-        maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
-        httpOnly: true, // для того чтобы не получить доступ к кукам из JS
-      });
+      const { userId } = req;
+      const user = await UsersService.getMe(userId);
       return res.status(constants.HTTP_STATUS_OK).send(user);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest("Невалидный id пользователя"));
+      }
       next(error);
     }
   }
 
-  async logout(req: Request, res: Response, next: NextFunction) {
+  async getOne(req: Request, res: Response, next: NextFunction) {
     try {
-      const { refreshToken } = req.cookies;
-      UserService.logout(refreshToken);
-      res.clearCookie("refreshToken");
-      return res.status(constants.HTTP_STATUS_OK).send({
-        message: "success",
-      });
+      const { id } = req.params;
+      if (!id) {
+        next(ApiError.BadRequest("id не передан"));
+      }
+      const post = await UsersService.getOne(id);
+      return res.status(constants.HTTP_STATUS_OK).send(post);
     } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest("Невалидный id поста"));
+      }
       next(error);
     }
   }
 
-  async refresh(req: Request, res: Response, next: NextFunction) {
+  async update(req: Request, res: Response, next: NextFunction) {
     try {
-      const { refreshToken } = req.cookies;
-      const user = await UserService.refresh(refreshToken);
-      res.cookie("refreshToken", user.refreshToken, {
-        maxAge: 3600000 * 24 * 10, // тк указывается в мс, то умножаем кол мс в часе на кол часов сутках и на кол дней
-        httpOnly: true, // для того чтобы не получить доступ к кукам из JS
-      });
-      return res.status(constants.HTTP_STATUS_OK).send(user);
+      const { body, userId, file } = req;
+      const updatedPost = await UsersService.update(userId, body, file);
+      return res.status(constants.HTTP_STATUS_OK).send(updatedPost);
     } catch (error) {
-      next(error);
-    }
-  }
-
-  async getAll(req: Request, res: Response, next: NextFunction) {
-    try {
-      const users = await UserService.getAll();
-      return res.status(constants.HTTP_STATUS_OK).send(users);
-    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
       next(error);
     }
   }
 }
 
-export default new UserController();
-
-/*export const getCurrentUser = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { _id } = req.user;
-    const user = await User.findById(_id).orFail(
-      new NotFoundError("Нет пользователя с таким id")
-    );
-    return res.status(constants.HTTP_STATUS_OK).send({
-      data: user,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getUserById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findById(userId).orFail(
-      new NotFoundError("Нет пользователя с таким id")
-    );
-    return res.status(constants.HTTP_STATUS_OK).send({
-      data: user,
-    });
-  } catch (error) {
-    next(error);
-  }
-
-  export const updateUserProfile = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const changedUser = await User.findByIdAndUpdate(
-        {
-          _id: req.user._id,
-        },
-        {
-          $set: req.body,
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      ).orFail(new NotFoundError("Нет пользователя с таким id"));
-      return res.status(constants.HTTP_STATUS_OK).send({
-        data: changedUser,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-}; */
+export default new UsersController();
