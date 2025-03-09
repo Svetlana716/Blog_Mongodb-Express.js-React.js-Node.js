@@ -7,6 +7,8 @@ export interface IUser {
   avatar: string;
   email: string;
   password: string;
+  isActivated: boolean;
+  activationLink: string;
   posts?: IPost[];
 }
 

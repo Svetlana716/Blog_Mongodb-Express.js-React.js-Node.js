@@ -1,4 +1,4 @@
-import Joi from "joi";
+import Joi, { link } from "joi";
 
 export const registerSchema = {
   body: Joi.object()
@@ -36,6 +36,14 @@ export const changeUserPassword = {
       currentPassword: Joi.string().min(8),
       newPassword1: Joi.string().min(8),
       newPassword2: Joi.string().min(8),
+    })
+    .unknown(true),
+};
+
+export const activationLink = {
+  params: Joi.object()
+    .keys({
+      link: Joi.string().required(),
     })
     .unknown(true),
 };

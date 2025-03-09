@@ -1,15 +1,19 @@
 import UserModel from "../models/user";
 import TokenService from "./token";
+import MailService from "./mail";
 import bcrypt from "bcrypt";
 import UserDto from "../dtos/user";
 import ApiError from "../errors/ApiError";
 import { JwtPayload } from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 import {
   IChangeEmail,
   IChangePassword,
   ICredentials,
   IRegisterUser,
 } from "types/IUser";
+
+const { API_URL = "" } = process.env;
 
 class AuthService {
   async register(body: IRegisterUser) {
@@ -22,14 +26,39 @@ class AuthService {
       throw ApiError.BadRequest(`Пароли не совпадают`);
     }
     const hash = await bcrypt.hash(password1, 10);
-    const newUser = await UserModel.create({ email, password: hash, name });
+    const activationLink = uuidv4();
+    const newUser = await UserModel.create({
+      email,
+      password: hash,
+      name,
+      activationLink,
+    });
+
+    // отправка на почту ссылки для активции аккаунта
+
+    await MailService.sendActivationMail(
+      email,
+      `${API_URL}/api/activate/${activationLink}`
+    );
+
     const tokens = await TokenService.generate({
       id: newUser.id,
       email: newUser.email,
+      isActivated: newUser.isActivated,
     });
+
     await TokenService.save(newUser.id, tokens.refreshToken);
     const userDto = new UserDto(newUser);
     return { ...tokens, user: userDto };
+  }
+
+  async activate(activationLink: string) {
+    const user = await UserModel.findOne({ activationLink });
+    if (!user) {
+      throw ApiError.BadRequest(`Некорректная ссылка`);
+    }
+    user.isActivated = true;
+    await user.save();
   }
 
   async login(body: ICredentials) {

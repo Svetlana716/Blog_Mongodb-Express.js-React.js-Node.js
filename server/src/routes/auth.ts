@@ -3,6 +3,7 @@ import { celebrate } from "celebrate";
 import AuthController from "../controllers/auth";
 import auth from "../middlewares/auth";
 import {
+  activationLink,
   changeUserEmail,
   changeUserPassword,
   loginSchema,
@@ -31,6 +32,12 @@ authRouter.patch(
   auth,
   celebrate(changeUserPassword),
   AuthController.changePassword
+);
+
+authRouter.get(
+  "/activate/:link",
+  celebrate(activationLink),
+  AuthController.activate
 );
 
 authRouter.post("/logout", AuthController.logout);
