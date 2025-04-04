@@ -13,6 +13,7 @@ import path from "path";
 const { PORT = 5000, MONGO_URL = "", CLIENT_URL } = process.env;
 
 const app = express();
+app.use(express.static(path.join(__dirname, "../../client/dist")));
 
 //middlevare
 app.use(
@@ -25,6 +26,9 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.get("/*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+});
 app.use("/api", router);
 
 app.use(errors());

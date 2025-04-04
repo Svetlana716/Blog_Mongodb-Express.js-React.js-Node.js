@@ -15,8 +15,12 @@ const MainPage = () => {
     dispatch(fetchGetPosts());
   }, [dispatch]);
 
-  if (posts.length === 0) {
-    return <p className="text-xl text-center text-white py-10">Нет постов</p>;
+  if (!posts) {
+    return (
+      <p className="font-semibold text-primary text-lg text-hover text-center py-10">
+        Нет постов
+      </p>
+    );
   }
 
   return (
