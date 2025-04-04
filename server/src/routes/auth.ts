@@ -8,6 +8,8 @@ import {
   changeUserPassword,
   loginSchema,
   registerSchema,
+  resetPassword,
+  setNewPassword,
 } from "../validations/auth";
 
 const authRouter = Router();
@@ -32,6 +34,18 @@ authRouter.patch(
   auth,
   celebrate(changeUserPassword),
   AuthController.changePassword
+);
+
+authRouter.post(
+  "/password-reset",
+  celebrate(resetPassword),
+  AuthController.resetPassword
+);
+
+authRouter.post(
+  "/password-reset/set-new",
+  celebrate(setNewPassword),
+  AuthController.setNewPassword
 );
 
 authRouter.get(

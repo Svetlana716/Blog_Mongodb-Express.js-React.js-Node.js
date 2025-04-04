@@ -23,6 +23,30 @@ class AuthController {
     }
   }
 
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await AuthService.resetPassword(req.body);
+      return res.status(constants.HTTP_STATUS_CREATED).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async setNewPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await AuthService.setNewPassword(req.body);
+      return res.status(constants.HTTP_STATUS_CREATED).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
   async activate(req: Request, res: Response, next: NextFunction) {
     try {
       const activationLink = req.params.link;

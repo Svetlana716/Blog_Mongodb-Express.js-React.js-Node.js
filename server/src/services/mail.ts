@@ -27,12 +27,31 @@ class MailService {
     const message = {
       from: SMTP_USER, // sender address
       to, // list of receivers
-      subject: `Активация аккаунта на ${CLIENT_URL}`, // Subject line
-      text: "Hello world?", // plain text body
+      subject: `Активация аккаунта ${CLIENT_URL}`, // Subject line
       html: `
             <div>
               <h1>Для активации аккаунта перейдите по ссылке</h1>
               <a href="${link}">${link}</a>
+            </div>
+      `, // html body
+    };
+    try {
+      const info = await this.transporter.sendMail(message);
+      console.log("Email sent: " + info.response);
+    } catch (error) {
+      console.error("Error sending email: ", error);
+    }
+  }
+
+  async sendResetPasswordCode(to: string, code: string) {
+    const message = {
+      from: SMTP_USER, // sender address
+      to, // list of receivers
+      subject: `Восстановление пароля от аккаунта ${CLIENT_URL}`, // Subject line
+      html: `
+            <div>
+              <h1>Для восстановления пароля введите код из письма</h1>
+              <p>${code}</p>
             </div>
       `, // html body
     };

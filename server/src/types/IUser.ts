@@ -9,6 +9,7 @@ export interface IUser {
   password: string;
   isActivated: boolean;
   activationLink: string;
+  resetPasswordCode?: string;
   posts?: IPost[];
 }
 
@@ -32,6 +33,12 @@ export interface IChangeEmail {
 
 export interface IChangePassword {
   currentPassword: string;
+  newPassword1: string;
+  newPassword2: string;
+}
+
+export interface IResetPassword {
+  code: string;
   newPassword1: string;
   newPassword2: string;
 }

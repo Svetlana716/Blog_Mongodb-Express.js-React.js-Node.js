@@ -11,6 +11,7 @@ import {
   IChangePassword,
   ICredentials,
   IRegisterUser,
+  IResetPassword,
 } from "types/IUser";
 
 const { API_URL = "" } = process.env;
@@ -35,7 +36,6 @@ class AuthService {
     });
 
     // отправка на почту ссылки для активции аккаунта
-
     await MailService.sendActivationMail(
       email,
       `${API_URL}/api/activate/${activationLink}`
@@ -49,6 +49,49 @@ class AuthService {
 
     await TokenService.save(newUser.id, tokens.refreshToken);
     const userDto = new UserDto(newUser);
+    return { ...tokens, user: userDto };
+  }
+
+  async resetPassword(body: Pick<ICredentials, "email">) {
+    const { email } = body;
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw ApiError.BadRequest(`Пользователь c ${email} не существует`);
+    }
+
+    const resetPasswordCode = uuidv4();
+    user.resetPasswordCode = resetPasswordCode;
+    await user.save();
+
+    // отправка на почту кода для сброса пароля
+    await MailService.sendResetPasswordCode(email, resetPasswordCode);
+    return {
+      message: "Письмо с кодом для восстановления пароля успешно отправлено",
+    };
+  }
+
+  async setNewPassword(body: IResetPassword) {
+    const { code, newPassword1, newPassword2 } = body;
+    const user = await UserModel.findOne({ resetPasswordCode: code });
+    if (!user) {
+      throw ApiError.BadRequest(`Некорректный код`);
+    }
+
+    if (newPassword1 !== newPassword2) {
+      throw ApiError.BadRequest(`Пароли не совпадают`);
+    }
+    const hash = await bcrypt.hash(newPassword1, 10);
+
+    user!.password = hash;
+    user.resetPasswordCode = undefined;
+    await user.save();
+
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
+    const userDto = new UserDto(user);
     return { ...tokens, user: userDto };
   }
 
@@ -102,6 +145,7 @@ class AuthService {
     }
 
     user.email = newEmail;
+    await user.save();
 
     const tokens = await TokenService.generate({
       id: user.id,
@@ -129,6 +173,7 @@ class AuthService {
     const hash = await bcrypt.hash(newPassword1, 10);
 
     user!.password = hash;
+    await user.save();
 
     const tokens = await TokenService.generate({
       id: user.id,

@@ -1,4 +1,4 @@
-import Joi, { link } from "joi";
+import Joi from "joi";
 
 export const registerSchema = {
   body: Joi.object()
@@ -44,6 +44,24 @@ export const activationLink = {
   params: Joi.object()
     .keys({
       link: Joi.string().required(),
+    })
+    .unknown(true),
+};
+
+export const resetPassword = {
+  body: Joi.object()
+    .keys({
+      email: Joi.string().email().required(),
+    })
+    .unknown(true),
+};
+
+export const setNewPassword = {
+  body: Joi.object()
+    .keys({
+      code: Joi.string().required(),
+      newPassword1: Joi.string().min(8),
+      newPassword2: Joi.string().min(8),
     })
     .unknown(true),
 };
