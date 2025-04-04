@@ -1,21 +1,24 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   changeEmail,
   changePassword,
   loginUser,
   logoutUser,
   registrationUser,
-} from "../../services/auth";
+  resetPassword,
+  sendResetPasswordCode,
+} from '../../services/auth';
 import {
   IAuthResponse,
   ICredentials,
   IEmailChange,
   IPasswordChange,
   IRegistration,
-} from "../../models/auth";
-import axios, { AxiosError } from "axios";
-import { URL } from "../../utils/constants";
-import { IResponseError } from "../../utils/types";
+  IResetPassword,
+} from '../../models/auth';
+import axios, { AxiosError } from 'axios';
+import { URL } from '../../utils/constants';
+import { IResponseError } from '../../utils/types';
 
 export const fetchRegistrationUser = createAsyncThunk<
   IAuthResponse,
@@ -24,11 +27,11 @@ export const fetchRegistrationUser = createAsyncThunk<
     rejectValue: IResponseError;
   }
 >(
-  "user/registration",
+  'user/registration',
   async (credentials: IRegistration, { rejectWithValue }) => {
     try {
       const res = await registrationUser(credentials);
-      localStorage.setItem("token", res.data.accessToken);
+      localStorage.setItem('token', res.data.accessToken);
       return res.data;
     } catch (err) {
       const error = err as AxiosError<IResponseError>;
@@ -46,10 +49,10 @@ export const fetchLoginUser = createAsyncThunk<
   {
     rejectValue: IResponseError;
   }
->("user/login", async (credentials: ICredentials, { rejectWithValue }) => {
+>('user/login', async (credentials: ICredentials, { rejectWithValue }) => {
   try {
     const { data } = await loginUser(credentials);
-    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem('token', data.accessToken);
     return data;
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
@@ -67,11 +70,11 @@ export const fetchChangeEmail = createAsyncThunk<
     rejectValue: IResponseError;
   }
 >(
-  "user/changeEmail",
+  'user/changeEmail',
   async (credentials: IEmailChange, { rejectWithValue }) => {
     try {
       const { data } = await changeEmail(credentials);
-      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem('token', data.accessToken);
       return data;
     } catch (err) {
       const error = err as AxiosError<IResponseError>;
@@ -90,11 +93,54 @@ export const fetchChangePassword = createAsyncThunk<
     rejectValue: IResponseError;
   }
 >(
-  "user/changePassword",
+  'user/changePassword',
   async (credentials: IPasswordChange, { rejectWithValue }) => {
     try {
       const { data } = await changePassword(credentials);
-      localStorage.setItem("token", data.accessToken);
+      localStorage.setItem('token', data.accessToken);
+      return data;
+    } catch (err) {
+      const error = err as AxiosError<IResponseError>;
+      if (!error.response) {
+        throw err;
+      }
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchSendResetPasswordCode = createAsyncThunk<
+  IAuthResponse,
+  Pick<ICredentials, 'email'>,
+  {
+    rejectValue: IResponseError;
+  }
+>('user/resetPassword', async (email, { rejectWithValue }) => {
+  try {
+    const { data } = await sendResetPasswordCode(email);
+    localStorage.setItem('token', data.accessToken);
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<IResponseError>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
+
+export const fetchResetPassword = createAsyncThunk<
+  IAuthResponse,
+  IResetPassword,
+  {
+    rejectValue: IResponseError;
+  }
+>(
+  'user/resetPassword',
+  async (credentials: IResetPassword, { rejectWithValue }) => {
+    try {
+      const { data } = await resetPassword(credentials);
+      localStorage.setItem('token', data.accessToken);
       return data;
     } catch (err) {
       const error = err as AxiosError<IResponseError>;
@@ -112,9 +158,9 @@ export const fetchLogoutUser = createAsyncThunk<
   {
     rejectValue: IResponseError;
   }
->("user/logout", async (_, { rejectWithValue }) => {
+>('user/logout', async (_, { rejectWithValue }) => {
   try {
-    localStorage.removeItem("token");
+    localStorage.removeItem('token');
     await logoutUser();
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
@@ -131,12 +177,12 @@ export const fetchCheckAuth = createAsyncThunk<
   {
     rejectValue: IResponseError;
   }
->("user/refresh", async (_, { rejectWithValue }) => {
+>('user/refresh', async (_, { rejectWithValue }) => {
   try {
     const { data } = await axios.get<IAuthResponse>(`${URL}/refresh`, {
       withCredentials: true,
     });
-    localStorage.setItem("token", data.accessToken);
+    localStorage.setItem('token', data.accessToken);
     return data;
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
