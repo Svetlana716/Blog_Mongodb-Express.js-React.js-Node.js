@@ -6,12 +6,14 @@ class UserDto {
   email;
   name;
   avatar;
+  isActivated;
 
   constructor(model: IUser) {
     this.id = model._id;
     this.email = model.email;
     this.name = model.name;
     this.avatar = model.avatar;
+    this.isActivated = model.isActivated;
   }
 }
 

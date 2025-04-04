@@ -1,4 +1,4 @@
-import { IUser } from "./user";
+import { IUser } from './user';
 
 export interface IAuthResponse {
   accessToken: string;
@@ -26,6 +26,12 @@ export interface IEmailChange {
 
 export interface IPasswordChange {
   currentPassword: string;
+  newPassword1: string;
+  newPassword2: string;
+}
+
+export interface IResetPassword {
+  code: string;
   newPassword1: string;
   newPassword2: string;
 }

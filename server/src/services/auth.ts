@@ -1,15 +1,20 @@
 import UserModel from "../models/user";
 import TokenService from "./token";
+import MailService from "./mail";
 import bcrypt from "bcrypt";
 import UserDto from "../dtos/user";
 import ApiError from "../errors/ApiError";
 import { JwtPayload } from "jsonwebtoken";
+import { v4 as uuidv4 } from "uuid";
 import {
   IChangeEmail,
   IChangePassword,
   ICredentials,
   IRegisterUser,
+  IResetPassword,
 } from "types/IUser";
+
+const { API_URL = "" } = process.env;
 
 class AuthService {
   async register(body: IRegisterUser) {
@@ -22,14 +27,81 @@ class AuthService {
       throw ApiError.BadRequest(`Пароли не совпадают`);
     }
     const hash = await bcrypt.hash(password1, 10);
-    const newUser = await UserModel.create({ email, password: hash, name });
+    const activationLink = uuidv4();
+    const newUser = await UserModel.create({
+      email,
+      password: hash,
+      name,
+      activationLink,
+    });
+
+    // отправка на почту ссылки для активции аккаунта
+    await MailService.sendActivationMail(
+      email,
+      `${API_URL}/api/activate/${activationLink}`
+    );
+
     const tokens = await TokenService.generate({
       id: newUser.id,
       email: newUser.email,
+      isActivated: newUser.isActivated,
     });
+
     await TokenService.save(newUser.id, tokens.refreshToken);
     const userDto = new UserDto(newUser);
     return { ...tokens, user: userDto };
+  }
+
+  async resetPassword(body: Pick<ICredentials, "email">) {
+    const { email } = body;
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw ApiError.BadRequest(`Пользователь c ${email} не существует`);
+    }
+
+    const resetPasswordCode = uuidv4();
+    user.resetPasswordCode = resetPasswordCode;
+    await user.save();
+
+    // отправка на почту кода для сброса пароля
+    await MailService.sendResetPasswordCode(email, resetPasswordCode);
+    return {
+      message: "Письмо с кодом для восстановления пароля успешно отправлено",
+    };
+  }
+
+  async setNewPassword(body: IResetPassword) {
+    const { code, newPassword1, newPassword2 } = body;
+    const user = await UserModel.findOne({ resetPasswordCode: code });
+    if (!user) {
+      throw ApiError.BadRequest(`Некорректный код`);
+    }
+
+    if (newPassword1 !== newPassword2) {
+      throw ApiError.BadRequest(`Пароли не совпадают`);
+    }
+    const hash = await bcrypt.hash(newPassword1, 10);
+
+    user!.password = hash;
+    user.resetPasswordCode = undefined;
+    await user.save();
+
+    const tokens = await TokenService.generate({
+      id: user.id,
+      email: user.email,
+    });
+    await TokenService.save(user.id, tokens.refreshToken);
+    const userDto = new UserDto(user);
+    return { ...tokens, user: userDto };
+  }
+
+  async activate(activationLink: string) {
+    const user = await UserModel.findOne({ activationLink });
+    if (!user) {
+      throw ApiError.BadRequest(`Некорректная ссылка`);
+    }
+    user.isActivated = true;
+    await user.save();
   }
 
   async login(body: ICredentials) {
@@ -73,6 +145,7 @@ class AuthService {
     }
 
     user.email = newEmail;
+    await user.save();
 
     const tokens = await TokenService.generate({
       id: user.id,
@@ -100,6 +173,7 @@ class AuthService {
     const hash = await bcrypt.hash(newPassword1, 10);
 
     user!.password = hash;
+    await user.save();
 
     const tokens = await TokenService.generate({
       id: user.id,

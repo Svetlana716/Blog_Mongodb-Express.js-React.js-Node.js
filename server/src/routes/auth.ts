@@ -3,10 +3,13 @@ import { celebrate } from "celebrate";
 import AuthController from "../controllers/auth";
 import auth from "../middlewares/auth";
 import {
+  activationLink,
   changeUserEmail,
   changeUserPassword,
   loginSchema,
   registerSchema,
+  resetPassword,
+  setNewPassword,
 } from "../validations/auth";
 
 const authRouter = Router();
@@ -31,6 +34,24 @@ authRouter.patch(
   auth,
   celebrate(changeUserPassword),
   AuthController.changePassword
+);
+
+authRouter.post(
+  "/password-reset",
+  celebrate(resetPassword),
+  AuthController.resetPassword
+);
+
+authRouter.post(
+  "/password-reset/set-new",
+  celebrate(setNewPassword),
+  AuthController.setNewPassword
+);
+
+authRouter.get(
+  "/activate/:link",
+  celebrate(activationLink),
+  AuthController.activate
 );
 
 authRouter.post("/logout", AuthController.logout);

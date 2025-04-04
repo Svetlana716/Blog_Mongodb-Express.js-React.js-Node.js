@@ -4,6 +4,8 @@ import ApiError from "../errors/ApiError";
 import AuthService from "../services/auth";
 import { Error as MongooseError } from "mongoose";
 
+const { CLIENT_URL = "" } = process.env;
+
 class AuthController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
@@ -13,6 +15,43 @@ class AuthController {
         httpOnly: true, // для того чтобы не получить доступ к кукам из JS
       });
       return res.status(constants.HTTP_STATUS_CREATED).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async resetPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await AuthService.resetPassword(req.body);
+      return res.status(constants.HTTP_STATUS_CREATED).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async setNewPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const user = await AuthService.setNewPassword(req.body);
+      return res.status(constants.HTTP_STATUS_CREATED).send(user);
+    } catch (error) {
+      if (error instanceof MongooseError) {
+        next(ApiError.BadRequest(error.message));
+      }
+      next(error);
+    }
+  }
+
+  async activate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const activationLink = req.params.link;
+      await AuthService.activate(activationLink);
+      return res.redirect(CLIENT_URL);
     } catch (error) {
       if (error instanceof MongooseError) {
         next(ApiError.BadRequest(error.message));

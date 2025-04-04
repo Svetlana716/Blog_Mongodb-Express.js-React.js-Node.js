@@ -1,20 +1,20 @@
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useNavigate, useParams } from 'react-router';
 import {
   AiFillDelete,
   AiFillEye,
   AiOutlineMessage,
   AiTwotoneEdit,
-} from "react-icons/ai";
-import FormatDate from "../utils/FormatDate";
-import { staticFilesURL } from "../utils/constants";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchDeletePost, fetchGetPostById } from "../store/posts/actions";
-import { getAuthInfoPath } from "../store/auth/selectors";
-import { getPostInfoPath } from "../store/posts/selectors";
-import { useEffect } from "react";
-import Comments from "../components/CommentForm";
-import { IoArrowBackOutline } from "react-icons/io5";
-import ErrorMessage from "../components/ErrorMessage";
+} from 'react-icons/ai';
+import FormatDate from '../utils/FormatDate';
+import { staticFilesURL } from '../utils/constants';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchDeletePost, fetchGetPostById } from '../store/posts/actions';
+import { getAuthInfoPath } from '../store/auth/selectors';
+import { getPostInfoPath } from '../store/posts/selectors';
+import { useEffect } from 'react';
+import Comments from '../components/CommentForm';
+import { IoArrowBackOutline } from 'react-icons/io5';
+import ErrorMessage from '../components/ErrorMessage';
 
 const PostPage = () => {
   const { id } = useParams();
@@ -45,7 +45,7 @@ const PostPage = () => {
   const handleDeletePost = (id: string | undefined) => {
     dispatch(fetchDeletePost(id));
     if (!error && !isLoading) {
-      navigate("/myPosts");
+      navigate('/myPosts');
     }
   };
 
@@ -66,7 +66,7 @@ const PostPage = () => {
             <div className="flex flex-col flex-grow">
               <div
                 className={
-                  post?.picture ? "flex rouded-sm h-80" : "flex rounded-sm"
+                  post?.picture ? 'flex rouded-sm h-80' : 'flex rounded-sm'
                 }
               >
                 {post?.picture && (
@@ -94,12 +94,12 @@ const PostPage = () => {
                   <AiFillEye /> <span>{post.views}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2  opacity-50">
-                  <AiOutlineMessage />{" "}
+                  <AiOutlineMessage />{' '}
                   <span>{post.comments?.length || 0} </span>
                 </div>
               </div>
 
-              {user?.id === post.author.id && (
+              {user?._id === post.author.id && (
                 <div className="flex gap-3 mt-4">
                   <Link to={`/posts/${id}/edit`}>
                     <AiTwotoneEdit

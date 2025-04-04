@@ -1,16 +1,14 @@
-import { useEffect } from "react";
-import { SideBar } from "../components/SideBar";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchGetPosts } from "../store/posts/actions";
-import { getPostInfoPath } from "../store/posts/selectors";
-import PostItem from "../components/PostItem";
-import useResize from "../hooks/useResize";
+import { useEffect } from 'react';
+import { SideBar } from '../components/SideBar';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchGetPosts } from '../store/posts/actions';
+import { getPostInfoPath } from '../store/posts/selectors';
+import PostItem from '../components/PostItem';
+import useResize from '../hooks/useResize';
 
 const MainPage = () => {
   const dispatch = useAppDispatch();
-
   const { posts, popularPosts } = useAppSelector(getPostInfoPath);
-
   const { isDesktop } = useResize();
 
   useEffect(() => {

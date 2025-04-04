@@ -1,38 +1,38 @@
-import { Link } from 'react-router';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { FC } from 'react';
-import { useForm } from '../hooks/useForm';
-import { fetchLoginUser } from '../store/auth/actions';
-import { getAuthInfoPath } from '../store/auth/selectors';
+import { Link, useNavigate } from 'react-router';
 import ErrorMessage from '../components/ErrorMessage';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getAuthInfoPath } from '../store/auth/selectors';
+import { useForm } from '../hooks/useForm';
+import { fetchSendResetPasswordCode } from '../store/auth/actions';
 
 interface IInput {
   email: string;
-  password: string;
 }
 
-const LoginPage: FC = () => {
+const ForgotPasswordPage = () => {
   const dispatch = useAppDispatch();
   const { isLoading, error } = useAppSelector(getAuthInfoPath);
+  const navigate = useNavigate();
 
   const { values, handleChange } = useForm<IInput>({
     email: '',
-    password: '',
   });
 
-  const { email, password } = values;
+  const { email } = values;
 
-  const handleLoginUser = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSendResetPasswordCode = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(fetchLoginUser({ email, password }));
+    dispatch(fetchSendResetPasswordCode({ email }));
+    navigate('/reset-password', { replace: true });
   };
+
   return (
     <form
-      onSubmit={handleLoginUser}
+      onSubmit={handleSendResetPasswordCode}
       className="w-9/10 sm:w-2/3 lg:w-1/3 h-60 mx-auto mt-40"
     >
       <h1 className="text-lg text-primary font-semibold text-center">
-        Авторизация
+        Введите email
       </h1>
       <label className="text-md text-primary" htmlFor="email">
         email:
@@ -46,44 +46,25 @@ const LoginPage: FC = () => {
           className="input mb-5"
         />
       </label>
-      <label className="text-md text-primary" htmlFor="password">
-        пароль:
-        <input
-          id="password"
-          type="password"
-          placeholder="password"
-          value={password}
-          name={'password'}
-          onChange={handleChange}
-          className="input mb-3"
-        />
-      </label>
 
       {isLoading && <p>"Загрузка..."</p>}
       {error && <ErrorMessage>{error}</ErrorMessage>}
-
-      <Link
-        to="/forgot-password"
-        className="text-lg text-primary font-semibold text-hover"
-      >
-        Забыли пароль?
-      </Link>
 
       <div className="flex gap-8 justify-center mt-4">
         <button
           type="submit"
           className="button bg-secondary text-md text-primary block-hover"
         >
-          Войти
+          Восстановить
         </button>
         <Link
-          to="/register"
+          to="/login"
           className="text-lg text-primary font-semibold text-hover"
         >
-          Нет аккаунта?
+          Вспомнили пароль?
         </Link>
       </div>
     </form>
   );
 };
-export default LoginPage;
+export default ForgotPasswordPage;

@@ -1,15 +1,21 @@
 import jwt from "jsonwebtoken";
+import { StringValue } from "ms";
 import TokenModel from "../models/token";
 
-const { JWT_ACCESS_SECRET_KEY = "", JWT_REFRESH_SECRET_KEY = "" } = process.env;
+const {
+  JWT_ACCESS_SECRET_KEY = "",
+  JWT_REFRESH_SECRET_KEY = "",
+  TTL_ACCESS_TOKEN = "",
+  TTL_REFRESH_TOKEN = "",
+} = process.env;
 
 class TokenService {
   async generate(payload: any) {
     const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET_KEY, {
-      expiresIn: "15m",
+      expiresIn: TTL_ACCESS_TOKEN as StringValue,
     });
     const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET_KEY, {
-      expiresIn: "10d",
+      expiresIn: TTL_REFRESH_TOKEN as StringValue,
     });
     return { accessToken, refreshToken };
   }

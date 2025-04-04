@@ -34,6 +34,12 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 8,
     },
+    isActivated: { type: Boolean, default: false },
+    activationLink: { type: String },
+    resetPasswordCode: {
+      type: String,
+      required: false,
+    },
     posts: [
       {
         required: false,
