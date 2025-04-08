@@ -93,7 +93,7 @@ const PostPage = () => {
                   <AiFillEye /> <span>{post.views}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2  opacity-50">
-                  <AiOutlineMessage />{' '}
+                  <AiOutlineMessage />
                   <span>{post.comments?.length || 0} </span>
                 </div>
               </div>
