@@ -17,7 +17,6 @@ import {
   IResetPassword,
 } from '../../models/auth';
 import axios, { AxiosError } from 'axios';
-import { URL } from '../../utils/constants';
 import { IResponseError } from '../../utils/types';
 
 export const fetchRegistrationUser = createAsyncThunk<
@@ -152,6 +151,31 @@ export const fetchResetPassword = createAsyncThunk<
   }
 );
 
+export const fetchCheckAuth = createAsyncThunk<
+  IAuthResponse,
+  undefined,
+  {
+    rejectValue: IResponseError;
+  }
+>('user/refresh', async (_, { rejectWithValue }) => {
+  try {
+    const { data } = await axios.get<IAuthResponse>(
+      `${import.meta.env.VITE_URL}/api/refresh`,
+      {
+        withCredentials: true,
+      }
+    );
+    localStorage.setItem('token', data.accessToken);
+    return data;
+  } catch (err) {
+    const error = err as AxiosError<IResponseError>;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
+});
+
 export const fetchLogoutUser = createAsyncThunk<
   void,
   undefined,
@@ -162,28 +186,6 @@ export const fetchLogoutUser = createAsyncThunk<
   try {
     localStorage.removeItem('token');
     await logoutUser();
-  } catch (err) {
-    const error = err as AxiosError<IResponseError>;
-    if (!error.response) {
-      throw err;
-    }
-    return rejectWithValue(error.response.data);
-  }
-});
-
-export const fetchCheckAuth = createAsyncThunk<
-  IAuthResponse,
-  undefined,
-  {
-    rejectValue: IResponseError;
-  }
->('user/refresh', async (_, { rejectWithValue }) => {
-  try {
-    const { data } = await axios.get<IAuthResponse>(`${URL}/refresh`, {
-      withCredentials: true,
-    });
-    localStorage.setItem('token', data.accessToken);
-    return data;
   } catch (err) {
     const error = err as AxiosError<IResponseError>;
     if (!error.response) {

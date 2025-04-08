@@ -1,7 +1,6 @@
-import { Link } from "react-router";
-import { FC } from "react";
-import { staticFilesURL } from "../utils/constants";
-import { IUser } from "../models/user";
+import { Link } from 'react-router';
+import { FC } from 'react';
+import { IUser } from '../models/user';
 
 interface Props {
   user: IUser;
@@ -9,10 +8,10 @@ interface Props {
 
 const Avatar: FC<Props> = ({ user }) => {
   const avatar = user?.name
-    .split(" ")
+    .split(' ')
     .map((el) => el[0].toUpperCase())
     .slice(0, 2)
-    .join("");
+    .join('');
   return (
     <Link
       to="/myProfile/core"
@@ -20,7 +19,7 @@ const Avatar: FC<Props> = ({ user }) => {
     >
       {user!.avatar ? (
         <img
-          src={`${staticFilesURL}/${user!.avatar}`}
+          src={`${import.meta.env.VITE_URL}/uploads/${user!.avatar}`}
           alt="avatar"
           className="rounded-full w-10 h-10"
         />

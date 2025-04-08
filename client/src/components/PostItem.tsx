@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import FormatDate from '../utils/FormatDate';
 import { IPost } from '../models/post';
 import { FC } from 'react';
-import { staticFilesURL } from '../utils/constants';
 
 interface Props {
   post: IPost;
@@ -29,7 +28,7 @@ const PostItem: FC<Props> = ({ post }) => {
         >
           {post.picture && (
             <img
-              src={`${staticFilesURL}/${post.picture}`}
+              src={`${import.meta.env.VITE_URL}/uploads/${post.picture}`}
               alt="img"
               className="object-cover w-full"
             />

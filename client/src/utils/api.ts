@@ -1,15 +1,14 @@
-import axios from "axios";
-import { URL } from "./constants";
-import { IAuthResponse } from "../models/auth";
+import axios from 'axios';
+import { IAuthResponse } from '../models/auth';
 
 const api = axios.create({
-  baseURL: URL,
+  baseURL: `${import.meta.env.VITE_URL}/api`,
   timeout: 1000,
   withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
   return config;
 });
 
@@ -24,10 +23,13 @@ api.interceptors.response.use(
     ) {
       originalReq._isRetry = true;
       try {
-        const { data } = await axios.get<IAuthResponse>(`${URL}/refresh`, {
-          withCredentials: true,
-        });
-        localStorage.setItem("token", data.accessToken);
+        const { data } = await axios.get<IAuthResponse>(
+          `${import.meta.env.VITE_URL}/api/refresh`,
+          {
+            withCredentials: true,
+          }
+        );
+        localStorage.setItem('token', data.accessToken);
         return api.request(originalReq);
       } catch (error) {
         console.log(error);

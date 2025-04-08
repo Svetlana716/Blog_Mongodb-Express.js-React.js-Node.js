@@ -13,26 +13,21 @@ const MyPostsPage = () => {
     dispatch(fetchGetMyPosts());
   }, [dispatch]);
 
-  if (!myPosts) {
-    return (
-      <p className="font-semibold text-primary text-lg text-hover text-center py-10">
-        Нет постов
-      </p>
-    );
-  }
-
   return (
     <>
-      {isLoading ? (
-        <p>"loading"</p>
-      ) : error ? (
-        <p>{error}</p>
-      ) : (
-        <div className="w-full lg:w-9/10 mx-auto py-10 flex flex-col gap-10">
+      {isLoading && <p>"loading"</p>} {error && <p>{error}</p>}
+      {myPosts ? (
+        <ul className="w-full lg:w-9/10 mx-auto py-10 flex flex-col gap-10">
           {myPosts?.map((post) => (
-            <PostItem post={post} key={post._id} />
+            <li key={post._id}>
+              <PostItem post={post} />
+            </li>
           ))}
-        </div>
+        </ul>
+      ) : (
+        <p className="font-semibold text-primary text-lg text-hover text-center py-10">
+          Нет постов
+        </p>
       )}
     </>
   );

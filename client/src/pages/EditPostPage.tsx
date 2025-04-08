@@ -1,13 +1,12 @@
-import { useNavigate, useParams } from "react-router";
-import { useForm } from "../hooks/useForm";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { fetchEditPost, fetchGetPostById } from "../store/posts/actions";
-import { getPostInfoPath } from "../store/posts/selectors";
-import { IPostFormInput } from "../utils/types";
-import { useEffect } from "react";
-import { staticFilesURL } from "../utils/constants";
-import ErrorMessage from "../components/ErrorMessage";
-import { IoArrowBackOutline } from "react-icons/io5";
+import { useNavigate, useParams } from 'react-router';
+import { useForm } from '../hooks/useForm';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { fetchEditPost, fetchGetPostById } from '../store/posts/actions';
+import { getPostInfoPath } from '../store/posts/selectors';
+import { IPostFormInput } from '../utils/types';
+import { useEffect } from 'react';
+import ErrorMessage from '../components/ErrorMessage';
+import { IoArrowBackOutline } from 'react-icons/io5';
 
 const EditPostPage = () => {
   const dispatch = useAppDispatch();
@@ -27,7 +26,7 @@ const EditPostPage = () => {
   const { values, handleChange, reset } = useForm<IPostFormInput>({
     title: post!.title,
     text: post!.text,
-    picture: "",
+    picture: '',
   });
 
   if (!post) {
@@ -77,7 +76,7 @@ const EditPostPage = () => {
           {post && !picture && (
             <img
               className="m-auto h-80"
-              src={`${staticFilesURL}/${post.picture}`}
+              src={`${import.meta.env.VITE_URL}/uploads/${post.picture}`}
               alt="image"
             />
           )}
@@ -102,7 +101,7 @@ const EditPostPage = () => {
           Post text:
           <textarea
             id="text"
-            name={"text"}
+            name={'text'}
             value={text}
             onChange={handleChange}
             placeholder="post text"
