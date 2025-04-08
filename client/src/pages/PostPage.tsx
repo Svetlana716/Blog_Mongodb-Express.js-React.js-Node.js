@@ -6,7 +6,6 @@ import {
   AiTwotoneEdit,
 } from 'react-icons/ai';
 import FormatDate from '../utils/FormatDate';
-import { staticFilesURL } from '../utils/constants';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchDeletePost, fetchGetPostById } from '../store/posts/actions';
 import { getAuthInfoPath } from '../store/auth/selectors';
@@ -71,7 +70,7 @@ const PostPage = () => {
               >
                 {post?.picture && (
                   <img
-                    src={`${staticFilesURL}/${post.picture}`}
+                    src={`${import.meta.env.VITE_URL}/uploads/${post.picture}`}
                     alt="img"
                     className="object-cover w-full"
                   />
@@ -94,7 +93,7 @@ const PostPage = () => {
                   <AiFillEye /> <span>{post.views}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2  opacity-50">
-                  <AiOutlineMessage />{' '}
+                  <AiOutlineMessage />
                   <span>{post.comments?.length || 0} </span>
                 </div>
               </div>

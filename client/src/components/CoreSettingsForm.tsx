@@ -1,11 +1,10 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getUserInfoPath } from "../store/users/selectors";
-import { useForm } from "../hooks/useForm";
-import { ICoreSettingsFormInput } from "../utils/types";
-import { fetchEditMe, fetchGetMe } from "../store/users/actions";
-import { staticFilesURL } from "../utils/constants";
-import ErrorMessage from "./ErrorMessage";
+import { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { getUserInfoPath } from '../store/users/selectors';
+import { useForm } from '../hooks/useForm';
+import { ICoreSettingsFormInput } from '../utils/types';
+import { fetchEditMe, fetchGetMe } from '../store/users/actions';
+import ErrorMessage from './ErrorMessage';
 
 const CoreSettingsForm = () => {
   const dispatch = useAppDispatch();
@@ -19,9 +18,9 @@ const CoreSettingsForm = () => {
 
   const { values, handleChange, setNewValues } =
     useForm<ICoreSettingsFormInput>({
-      name: "",
-      description: "",
-      avatar: "",
+      name: '',
+      description: '',
+      avatar: '',
     });
 
   useEffect(() => {
@@ -29,7 +28,7 @@ const CoreSettingsForm = () => {
       setNewValues({
         name: user.name,
         description: user.description,
-        avatar: "",
+        avatar: '',
       });
     }
   }, [user]);
@@ -75,7 +74,7 @@ const CoreSettingsForm = () => {
         {user.avatar && !avatar && (
           <img
             className="m-auto h-80"
-            src={`${staticFilesURL}/${user.avatar}`}
+            src={`${import.meta.env.VITE_URL}/uploads/${user.avatar}`}
             alt="avatar"
           />
         )}

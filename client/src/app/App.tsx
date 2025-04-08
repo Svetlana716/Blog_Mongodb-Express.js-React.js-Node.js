@@ -8,21 +8,18 @@ import RegisterPage from '../pages/RegisterPage';
 import LoginPage from '../pages/LoginPage';
 import EditPostPage from '../pages/EditPostPage';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { useAppDispatch } from '../store/hooks';
 import { fetchCheckAuth } from '../store/auth/actions';
 import { OnlyAuth, OnlyUnAuth } from './ProtectedRoute';
 import NotFoundPage from '../pages/NotFoundPage';
 import MyProfilePage from '../pages/MyProfilePage';
 import CoreSettingsForm from '../components/CoreSettingsForm';
 import CredentialsSettingsForm from '../components/CredentialsSetting';
-import { getAuthInfoPath } from '../store/auth/selectors';
-import Modal from '../components/Modal';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage';
 import ResetPasswordPage from '../pages/ResetPasswordPage';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { user, isAuth } = useAppSelector(getAuthInfoPath);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
@@ -33,7 +30,6 @@ function App() {
   return (
     <Layout>
       <>
-        {isAuth && !user?.isActivated && <Modal />}
         <Routes>
           <Route
             path="register"
@@ -42,6 +38,14 @@ function App() {
           <Route
             path="login"
             element={<OnlyUnAuth component={<LoginPage />} />}
+          />
+          <Route
+            path="/forgot-password"
+            element={<OnlyUnAuth component={<ForgotPasswordPage />} />}
+          />
+          <Route
+            path="/reset-password"
+            element={<OnlyUnAuth component={<ResetPasswordPage />} />}
           />
           <Route
             path="/forgot-password"

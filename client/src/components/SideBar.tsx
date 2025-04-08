@@ -1,18 +1,26 @@
-import { FC } from "react";
-import { Link } from "react-router";
-import { IPost } from "../models/post";
-import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
+import { FC } from 'react';
+import { Link } from 'react-router';
+import { IPost } from '../models/post';
+import { AiFillEye, AiOutlineMessage } from 'react-icons/ai';
 
 interface Props {
   posts: IPost[];
 }
 
 export const SideBar: FC<Props> = ({ posts }) => {
+  if (!posts) {
+    return (
+      <p className="font-semibold text-primary text-lg text-hover text-center py-10">
+        Нет постов
+      </p>
+    );
+  }
+
   return (
     <aside className="basis-2/5 bg-secondary rounded-sm p-5 box-border">
       <h2 className="text-lg font-semibold text-primary">Популярное:</h2>
       <ul className="list-none p-0 m-0">
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <li
             key={post._id}
             className="first:border-none border-t-2 border-black border-solid mt-5 first:pt-0 pt-5 "

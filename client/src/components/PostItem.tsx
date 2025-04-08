@@ -1,9 +1,8 @@
-import { AiFillEye, AiOutlineMessage } from "react-icons/ai";
-import { Link } from "react-router";
-import FormatDate from "../utils/FormatDate";
-import { IPost } from "../models/post";
-import { FC } from "react";
-import { staticFilesURL } from "../utils/constants";
+import { AiFillEye, AiOutlineMessage } from 'react-icons/ai';
+import { Link } from 'react-router';
+import FormatDate from '../utils/FormatDate';
+import { IPost } from '../models/post';
+import { FC } from 'react';
 
 interface Props {
   post: IPost;
@@ -11,7 +10,11 @@ interface Props {
 
 const PostItem: FC<Props> = ({ post }) => {
   if (!post) {
-    return <p className="text-xl text-center text-white py-10">Нет постa</p>;
+    return (
+      <p className="font-semibold text-primary text-lg text-hover text-center py-10">
+        Нет постa
+      </p>
+    );
   }
 
   return (
@@ -21,11 +24,11 @@ const PostItem: FC<Props> = ({ post }) => {
         className="flex flex-col basis-1/4 flex-grow bg-secondary rounded-sm p-5 text-primary text-md"
       >
         <div
-          className={post.picture ? "flex rouded-sm h-80" : "flex rounded-sm"}
+          className={post.picture ? 'flex rouded-sm h-80' : 'flex rounded-sm'}
         >
           {post.picture && (
             <img
-              src={`${staticFilesURL}/${post.picture}`}
+              src={`${import.meta.env.VITE_URL}/uploads/${post.picture}`}
               alt="img"
               className="object-cover w-full"
             />
