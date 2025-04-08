@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 import cors from "cors";
-//import { errorLogger } from "express-winston";
+import { errorLogger } from "express-winston";
 import { errors } from "celebrate";
 import cookieParser from "cookie-parser";
 import router from "./routes";
@@ -10,10 +10,11 @@ import { requestLogger } from "./middlewares/logger";
 import { error } from "./middlewares/error";
 import path from "path";
 
-const { PORT = 5000, MONGO_URL = "", CLIENT_URL } = process.env;
+const { PORT = 5000, MONGO_URL = "", CLIENT_URL = "" } = process.env;
 
 const app = express();
-//app.use(express.static(path.join(__dirname, "../../client/dist")));
+
+console.log(CLIENT_URL);
 
 //middlevare
 app.use(
@@ -26,14 +27,11 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(requestLogger);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-/* app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
-}); */
 app.use("/api", router);
 
 app.use(errors());
 app.use(error);
-//app.use(errorLogger);
+app.use(errorLogger);
 
 const connect = async () => {
   try {
